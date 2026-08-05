@@ -1,19 +1,25 @@
 # List of blocked phrases
 BLOCKED_PHRASES = [
+    "ignore previous instruction",
     "ignore previous instructions",
+    "forget your instruction",
     "forget your instructions",
+    "forget your rule",
     "forget your rules",
     "system prompt",
-    "reveal your prompt",
+    "developer prompt",
     "developer message",
-    "developer instructions",
+    "hidden instructions",
     "api key",
+    "password",
     "token",
+    "secret",
+    "act as",
+    "pretend to be",
     "jailbreak",
     "bypass",
-    "act as",
     "disable safety",
-    "ignore safety",
+    "ignore safety"
 ]
 
 
