@@ -1,14 +1,16 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 
 from config import Config
 from database.db import db
 
-# Import models so SQLAlchemy knows about them
+# Import models so SQLAlchemy creates the tables
 from database.models import User
 
 # Import routes
 from routes.chat_routes import chat_bp
+from routes.auth_routes import auth_bp
 
 app = Flask(__name__)
 
@@ -18,30 +20,27 @@ app.config.from_object(Config)
 # Enable CORS
 CORS(app)
 
-# Initialize database
+# Initialize Extensions
 db.init_app(app)
 
-# Register routes
+bcrypt = Bcrypt(app)
+
+# Register Blueprints
 app.register_blueprint(chat_bp)
+app.register_blueprint(auth_bp)
 
 
 @app.route("/")
 def home():
     return "✅ Secure AI Assistant Backend Running"
 
+
 if __name__ == "__main__":
-    print("Step 1: Starting app...")
-
     with app.app_context():
-        print("Step 2: Creating tables...")
         db.create_all()
-        print("Step 3: Tables created successfully!")
-
-    print("Step 4: Starting Flask server...")
 
     app.run(
-    host="127.0.0.1",
-    port=5000,
-    debug=True,
-    use_reloader=False
-)
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )
