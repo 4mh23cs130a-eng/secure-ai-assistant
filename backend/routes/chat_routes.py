@@ -1,42 +1,64 @@
 from flask import Blueprint, request, jsonify
+
 from services.gemini_service import generate_response
 from security.input_filter import check_input
+from security.guardrails import check_guardrails
 
 chat_bp = Blueprint("chat", __name__)
 
 
 @chat_bp.route("/chat", methods=["POST"])
 def chat():
+
     try:
-        # Get JSON data from frontend
+
         data = request.get_json()
 
-        # Check if request contains a message
         if not data or "message" not in data:
             return jsonify({
                 "success": False,
                 "error": "Message is required."
             }), 400
 
-        # Extract user message
         user_message = data["message"]
 
-        # Input Filtering (Security Layer 1)
+        # -------------------------
+        # Security Layer 1
+        # Input Filter
+        # -------------------------
+
         if not check_input(user_message):
             return jsonify({
                 "success": False,
-                "error": "⚠️ Request blocked by security policy."
+                "error": "⚠️ Blocked by Input Filter."
             }), 403
 
-        # Generate AI response
-        ai_response = generate_response(user_message)
+        # -------------------------
+        # Security Layer 2
+        # Guardrails
+        # -------------------------
+
+        is_safe, reason = check_guardrails(user_message)
+
+        if not is_safe:
+            return jsonify({
+                "success": False,
+                "error": f"⚠️ Blocked by Guardrails ({reason})."
+            }), 403
+
+        # -------------------------
+        # Gemini
+        # -------------------------
+
+        response = generate_response(user_message)
 
         return jsonify({
             "success": True,
-            "response": ai_response
+            "response": response
         })
 
     except Exception as e:
+
         return jsonify({
             "success": False,
             "error": str(e)
