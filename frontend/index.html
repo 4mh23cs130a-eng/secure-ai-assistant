@@ -1,50 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure AI Assistant</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <title>Sign Up | Secure AI Assistant</title>
+
+    <link rel="stylesheet" href="css/signup.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
 
-    <div class="chat-container">
+    <div class="container">
 
-        <header>
+        <div class="signup-card">
+
             <h1>🤖 Secure AI Assistant</h1>
-            <p>Powered by Gemini 2.5 Flash</p>
-        </header>
 
-        <div id="chat-box" class="chat-box">
+            <p>Create your account</p>
 
-            <div class="message bot">
-                <strong>AI:</strong>
-                Hello! 👋 I am your Secure AI Assistant.
-                How can I help you today?
-            </div>
+            <form id="signupForm">
 
-        </div>
+                <!-- Username -->
 
-        <div class="input-area">
+                <div class="input-group">
 
-            <input
-                type="text"
-                id="user-input"
-                placeholder="Type your message..."
-                autocomplete="off"
-            >
+                    <i class="fa-solid fa-user"></i>
 
-            <button id="send-btn">
-                Send
-            </button>
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Username"
+                        autocomplete="username"
+                        required>
+
+                </div>
+
+                <!-- Email -->
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Email Address"
+                        autocomplete="email"
+                        required>
+
+                </div>
+
+                <!-- Password -->
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                        autocomplete="new-password"
+                        required>
+
+                    <span class="toggle-password" data-target="password">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </span>
+
+                </div>
+
+                <!-- Confirm Password -->
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password"
+                        required>
+
+                    <span class="toggle-password" data-target="confirmPassword">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </span>
+
+                </div>
+
+                <!-- Password Strength -->
+
+                <div class="password-strength">
+
+                    <div id="strengthBar">
+
+                        <div id="strength"></div>
+
+                    </div>
+
+                    <small id="strengthText">
+
+                        Password Strength
+
+                    </small>
+
+                </div>
+
+                <!-- Button -->
+
+                <button
+                    id="signupBtn"
+                    type="submit">
+
+                    Create Account
+
+                </button>
+
+                <!-- Loading -->
+
+                <div id="loading" style="display:none;">
+
+                    <div class="spinner"></div>
+
+                    Creating Account...
+
+                </div>
+
+                <!-- Message -->
+
+                <div id="message"></div>
+
+            </form>
+
+            <p class="login-link">
+
+                Already have an account?
+
+                <a href="login.html">
+
+                    Login
+
+                </a>
+
+            </p>
 
         </div>
 
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/signup.js"></script>
 
 </body>
+
 </html>

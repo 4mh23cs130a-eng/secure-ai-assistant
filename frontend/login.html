@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Secure AI Assistant</title>
+
+    <link rel="stylesheet" href="css/login.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="login-card">
+
+        <h1>🤖 Secure AI Assistant</h1>
+
+        <p>Welcome Back</p>
+
+        <form id="loginForm">
+
+            <!-- Email -->
+
+            <div class="input-group">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                required>
+
+            </div>
+
+
+            <!-- Password -->
+
+            <div class="input-group">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required>
+
+                <span
+                class="toggle-password"
+                data-target="password">
+
+                    <i class="fa-solid fa-eye"></i>
+
+                </span>
+
+            </div>
+
+            <button
+            id="loginBtn"
+            type="submit">
+
+                Login
+
+            </button>
+
+            <div
+            id="loading"
+            style="display:none;">
+
+                <div class="spinner"></div>
+
+                Logging in...
+
+            </div>
+
+            <div id="message"></div>
+
+        </form>
+
+        <p class="signup-link">
+
+            Don't have an account?
+
+            <a href="index.html">
+
+                Create Account
+
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
