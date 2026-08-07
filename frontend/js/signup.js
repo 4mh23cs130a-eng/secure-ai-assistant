@@ -1,197 +1,73 @@
 const signupForm = document.getElementById("signupForm");
 
-const username = document.getElementById("username");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const confirmPassword = document.getElementById("confirmPassword");
+signupForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-const strength = document.getElementById("strength");
-const strengthText = document.getElementById("strengthText");
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
-const loading = document.getElementById("loading");
-const message = document.getElementById("message");
-const signupBtn = document.getElementById("signupBtn");
+    // Validation
+    if (!username || !email || !password || !confirmPassword) {
+        alert("Please fill all fields.");
+        return;
+    }
 
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
 
-// -----------------------------
-// Show / Hide Password
-// -----------------------------
+    if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return;
+    }
 
-document.querySelectorAll(".toggle-password").forEach(button => {
+    const submitButton = signupForm.querySelector("button");
+    submitButton.disabled = true;
+    submitButton.innerText = "Creating Account...";
 
-    button.addEventListener("click", () => {
+    try {
 
-        const input = document.getElementById(button.dataset.target);
+        const response = await fetch("http://127.0.0.1:5000/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password
+            })
+        });
 
-        const icon = button.querySelector("i");
+        const result = await response.json();
 
-        if (input.type === "password") {
+        if (response.ok && result.success) {
 
-            input.type = "text";
+            alert("🎉 Account created successfully!");
 
-            icon.classList.replace("fa-eye", "fa-eye-slash");
+            signupForm.reset();
+
+            window.location.href = "login.html";
 
         } else {
 
-            input.type = "password";
-
-            icon.classList.replace("fa-eye-slash", "fa-eye");
+            alert(result.message || "Signup failed.");
 
         }
 
-    });
+    } catch (error) {
 
-});
+        console.error(error);
 
+        alert("Unable to connect to backend.");
 
-// -----------------------------
-// Password Strength
-// -----------------------------
+    } finally {
 
-password.addEventListener("input", () => {
-
-    let score = 0;
-
-    const pass = password.value;
-
-    if (pass.length >= 8) score++;
-
-    if (/[A-Z]/.test(pass)) score++;
-
-    if (/[0-9]/.test(pass)) score++;
-
-    if (/[^A-Za-z0-9]/.test(pass)) score++;
-
-    switch(score){
-
-        case 1:
-
-            strength.style.width="25%";
-            strength.style.background="red";
-            strengthText.innerText="Weak Password";
-
-            break;
-
-        case 2:
-
-            strength.style.width="50%";
-            strength.style.background="orange";
-            strengthText.innerText="Medium Password";
-
-            break;
-
-        case 3:
-
-            strength.style.width="75%";
-            strength.style.background="#00bfff";
-            strengthText.innerText="Good Password";
-
-            break;
-
-        case 4:
-
-            strength.style.width="100%";
-            strength.style.background="limegreen";
-            strengthText.innerText="Strong Password";
-
-            break;
-
-        default:
-
-            strength.style.width="0";
-            strengthText.innerText="Password Strength";
-
-    }
-
-});
-
-
-// -----------------------------
-// Signup
-// -----------------------------
-
-signupForm.addEventListener("submit", async (e)=>{
-
-    e.preventDefault();
-
-    message.innerHTML="";
-
-    if(password.value !== confirmPassword.value){
-
-        message.style.color="yellow";
-        message.innerHTML="Passwords do not match.";
-
-        return;
-
-    }
-
-    loading.style.display="flex";
-
-    signupBtn.disabled=true;
-
-    try{
-
-        const response = await fetch("http://127.0.0.1:5000/signup",{
-
-            method:"POST",
-
-            headers:{
-
-                "Content-Type":"application/json"
-
-            },
-
-            body:JSON.stringify({
-
-                username:username.value,
-
-                email:email.value,
-
-                password:password.value
-
-            })
-
-        });
-
-        const data = await response.json();
-
-        loading.style.display="none";
-
-        signupBtn.disabled=false;
-
-        if(data.success){
-
-            message.style.color="lightgreen";
-
-            message.innerHTML=data.message;
-
-            setTimeout(()=>{
-
-                window.location.href="login.html";
-
-            },1500);
-
-        }
-
-        else{
-
-            message.style.color="yellow";
-
-            message.innerHTML=data.message;
-
-        }
-
-    }
-
-    catch(error){
-
-        loading.style.display="none";
-
-        signupBtn.disabled=false;
-
-        message.style.color="red";
-
-        message.innerHTML="Cannot connect to backend.";
+        submitButton.disabled = false;
+        submitButton.innerText = "Create Account";
 
     }
 

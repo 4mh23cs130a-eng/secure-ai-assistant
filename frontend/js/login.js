@@ -7,7 +7,6 @@ const loginBtn = document.getElementById("loginBtn");
 const loading = document.getElementById("loading");
 const message = document.getElementById("message");
 
-
 // ------------------------------
 // Show / Hide Password
 // ------------------------------
@@ -23,15 +22,11 @@ document.querySelectorAll(".toggle-password").forEach(button => {
         if (input.type === "password") {
 
             input.type = "text";
-
             icon.classList.replace("fa-eye", "fa-eye-slash");
 
-        }
-
-        else {
+        } else {
 
             input.type = "password";
-
             icon.classList.replace("fa-eye-slash", "fa-eye");
 
         }
@@ -52,7 +47,6 @@ loginForm.addEventListener("submit", async (e) => {
     message.innerHTML = "";
 
     loading.style.display = "flex";
-
     loginBtn.disabled = true;
 
     try {
@@ -62,15 +56,12 @@ loginForm.addEventListener("submit", async (e) => {
             method: "POST",
 
             headers: {
-
                 "Content-Type": "application/json"
-
             },
 
             body: JSON.stringify({
 
-                email: email.value,
-
+                email: email.value.trim(),
                 password: password.value
 
             })
@@ -80,26 +71,19 @@ loginForm.addEventListener("submit", async (e) => {
         const data = await response.json();
 
         loading.style.display = "none";
-
         loginBtn.disabled = false;
 
         if (data.success) {
 
-            // Save login info
+            // Save Login Status
+            localStorage.setItem("loggedIn", "true");
 
-            localStorage.setItem("token", data.token || "");
-
-            if (data.user) {
-
-                localStorage.setItem("username", data.user.username);
-
-                localStorage.setItem("email", data.user.email);
-
-            }
+            // Save User Details
+            localStorage.setItem("username", data.user.username);
+            localStorage.setItem("email", data.user.email);
 
             message.style.color = "#00ff88";
-
-            message.innerHTML = "Login Successful!";
+            message.innerHTML = "✅ Login Successful";
 
             setTimeout(() => {
 
@@ -107,12 +91,9 @@ loginForm.addEventListener("submit", async (e) => {
 
             }, 1000);
 
-        }
-
-        else {
+        } else {
 
             message.style.color = "#ff4444";
-
             message.innerHTML = data.message;
 
         }
@@ -122,12 +103,12 @@ loginForm.addEventListener("submit", async (e) => {
     catch (error) {
 
         loading.style.display = "none";
-
         loginBtn.disabled = false;
 
         message.style.color = "#ff4444";
+        message.innerHTML = "Cannot connect to backend.";
 
-        message.innerHTML = "Unable to connect to backend.";
+        console.error(error);
 
     }
 

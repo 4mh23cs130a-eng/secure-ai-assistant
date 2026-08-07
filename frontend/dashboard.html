@@ -1,50 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure AI Assistant</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <title>Dashboard | Secure AI Assistant</title>
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
 </head>
 
 <body>
 
-    <div class="chat-container">
+<div class="dashboard">
 
-        <header>
-            <h1>🤖 Secure AI Assistant</h1>
-            <p>Powered by Gemini 2.5 Flash</p>
-        </header>
+    <!-- Sidebar -->
 
-        <div id="chat-box" class="chat-box">
+    <aside class="sidebar">
 
-            <div class="message bot">
-                <strong>AI:</strong>
-                Hello! 👋 I am your Secure AI Assistant.
-                How can I help you today?
+        <div class="logo">
+
+            🤖 Secure AI
+
+        </div>
+
+        <ul>
+
+            <li class="active">
+                <i class="fa-solid fa-comments"></i>
+                Chat
+            </li>
+
+            <li>
+                <i class="fa-solid fa-plus"></i>
+                New Chat
+            </li>
+
+            <li>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Chat History
+            </li>
+
+            <li>
+                <i class="fa-solid fa-bookmark"></i>
+                Saved Chats
+            </li>
+
+            <li>
+                <i class="fa-solid fa-star"></i>
+                Favorites
+            </li>
+
+            <li onclick="window.location='settings.html'">
+                <i class="fa-solid fa-gear"></i>
+                Settings
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <!-- Header -->
+
+        <header class="topbar">
+
+            <h2>Secure AI Assistant</h2>
+
+            <div class="profile">
+
+                <div class="avatar">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </div>
+
+                <div>
+
+                    <h4 id="username">User</h4>
+
+                    <small>Online</small>
+
+                </div>
+
+                <button id="logoutBtn">
+
+                    Logout
+
+                </button>
+
             </div>
 
-        </div>
+        </header>
 
-        <div class="input-area">
+        <!-- Chat -->
+
+        <section class="chat-box" id="chatBox">
+
+            <div class="ai-message">
+
+                👋 Hello!
+
+                Welcome to Secure AI Assistant.
+
+                How can I help you today?
+
+            </div>
+
+        </section>
+
+        <!-- Input -->
+
+        <footer class="chat-input">
 
             <input
-                type="text"
-                id="user-input"
-                placeholder="Type your message..."
-                autocomplete="off"
-            >
 
-            <button id="send-btn">
-                Send
+                type="text"
+
+                id="userInput"
+
+                placeholder="Ask anything...">
+
+            <button id="sendBtn">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
             </button>
 
-        </div>
+        </footer>
 
-    </div>
+    </main>
 
-    <script src="js/script.js"></script>
+</div>
+
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

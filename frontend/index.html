@@ -1,166 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Sign Up | Secure AI Assistant</title>
-
-    <link rel="stylesheet" href="css/signup.css">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+    <title>Secure AI Assistant</title>
 </head>
 
 <body>
 
-    <div class="container">
+<script>
+    const loggedIn = localStorage.getItem("loggedIn");
 
-        <div class="signup-card">
-
-            <h1>🤖 Secure AI Assistant</h1>
-
-            <p>Create your account</p>
-
-            <form id="signupForm">
-
-                <!-- Username -->
-
-                <div class="input-group">
-
-                    <i class="fa-solid fa-user"></i>
-
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Username"
-                        autocomplete="username"
-                        required>
-
-                </div>
-
-                <!-- Email -->
-
-                <div class="input-group">
-
-                    <i class="fa-solid fa-envelope"></i>
-
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Email Address"
-                        autocomplete="email"
-                        required>
-
-                </div>
-
-                <!-- Password -->
-
-                <div class="input-group">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Password"
-                        autocomplete="new-password"
-                        required>
-
-                    <span class="toggle-password" data-target="password">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
-                </div>
-
-                <!-- Confirm Password -->
-
-                <div class="input-group">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        placeholder="Confirm Password"
-                        autocomplete="new-password"
-                        required>
-
-                    <span class="toggle-password" data-target="confirmPassword">
-
-                        <i class="fa-solid fa-eye"></i>
-
-                    </span>
-
-                </div>
-
-                <!-- Password Strength -->
-
-                <div class="password-strength">
-
-                    <div id="strengthBar">
-
-                        <div id="strength"></div>
-
-                    </div>
-
-                    <small id="strengthText">
-
-                        Password Strength
-
-                    </small>
-
-                </div>
-
-                <!-- Button -->
-
-                <button
-                    id="signupBtn"
-                    type="submit">
-
-                    Create Account
-
-                </button>
-
-                <!-- Loading -->
-
-                <div id="loading" style="display:none;">
-
-                    <div class="spinner"></div>
-
-                    Creating Account...
-
-                </div>
-
-                <!-- Message -->
-
-                <div id="message"></div>
-
-            </form>
-
-            <p class="login-link">
-
-                Already have an account?
-
-                <a href="login.html">
-
-                    Login
-
-                </a>
-
-            </p>
-
-        </div>
-
-    </div>
-
-    <script src="js/signup.js"></script>
+    if (loggedIn === "true") {
+        window.location.href = "dashboard.html";
+    } else {
+        window.location.href = "signup.html";
+    }
+</script>
 
 </body>
-
 </html>
