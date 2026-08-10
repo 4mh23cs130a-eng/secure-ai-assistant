@@ -861,80 +861,57 @@ document
    SHOW VIEW
 ===================================================== */
 
+/* =====================================================
+   SHOW ONLY ONE VIEW AT A TIME
+===================================================== */
+
 function showView(view) {
 
-
     const dashboard =
-        document.getElementById(
-            "dashboardView"
-        );
-
+        document.getElementById("dashboardView");
 
     const history =
-        document.getElementById(
-            "historyView"
-        );
-
+        document.getElementById("historyView");
 
     const saved =
-        document.getElementById(
-            "savedView"
-        );
-
+        document.getElementById("savedView");
 
     const favorites =
-        document.getElementById(
-            "favoritesView"
-        );
-
+        document.getElementById("favoritesView");
 
     const settings =
-        document.getElementById(
-            "settingsView"
-        );
+        document.getElementById("settingsView");
 
 
-    dashboard.classList.remove(
-        "active-view"
-    );
+    /* ---------------------------------------------
+       HIDE ALL VIEWS FIRST
+    --------------------------------------------- */
+
+    dashboard.style.display = "none";
+    history.style.display = "none";
+    saved.style.display = "none";
+    favorites.style.display = "none";
+    settings.style.display = "none";
 
 
-    history.classList.remove(
-        "active-view"
-    );
-
-
-    saved.classList.remove(
-        "active-view"
-    );
-
-
-    favorites.classList.remove(
-        "active-view"
-    );
-
-
-    settings.classList.remove(
-        "active-view"
-    );
-
+    /* Remove active class from sidebar */
 
     document
         .querySelectorAll(".nav-item")
-        .forEach(btn => {
+        .forEach(button => {
 
-            btn.classList.remove(
-                "active"
-            );
+            button.classList.remove("active");
 
         });
 
 
+    /* ---------------------------------------------
+       CHAT
+    --------------------------------------------- */
+
     if (view === "chat") {
 
-        dashboard.classList.add(
-            "active-view"
-        );
+        dashboard.style.display = "block";
 
         document
             .getElementById("chatBtn")
@@ -942,8 +919,7 @@ function showView(view) {
 
         document.getElementById(
             "pageTitle"
-        ).textContent =
-            "AI Assistant";
+        ).textContent = "AI Assistant";
 
         document.getElementById(
             "pageSubtitle"
@@ -953,11 +929,13 @@ function showView(view) {
     }
 
 
-    if (view === "history") {
+    /* ---------------------------------------------
+       CHAT HISTORY
+    --------------------------------------------- */
 
-        history.classList.add(
-            "active-view"
-        );
+    else if (view === "history") {
+
+        history.style.display = "block";
 
         document
             .getElementById("historyBtn")
@@ -965,22 +943,25 @@ function showView(view) {
 
         document.getElementById(
             "pageTitle"
-        ).textContent =
-            "Chat History";
+        ).textContent = "Chat History";
 
         document.getElementById(
             "pageSubtitle"
         ).textContent =
-            "View your previous conversations";
+            "View and manage your previous conversations";
+
+        renderHistory();
 
     }
 
 
-    if (view === "saved") {
+    /* ---------------------------------------------
+       SAVED CHATS
+    --------------------------------------------- */
 
-        saved.classList.add(
-            "active-view"
-        );
+    else if (view === "saved") {
+
+        saved.style.display = "block";
 
         document
             .getElementById("savedChatsBtn")
@@ -988,22 +969,25 @@ function showView(view) {
 
         document.getElementById(
             "pageTitle"
-        ).textContent =
-            "Saved Chats";
+        ).textContent = "Saved Chats";
 
         document.getElementById(
             "pageSubtitle"
         ).textContent =
             "Your saved conversations";
 
+        renderSaved();
+
     }
 
 
-    if (view === "favorites") {
+    /* ---------------------------------------------
+       FAVORITES
+    --------------------------------------------- */
 
-        favorites.classList.add(
-            "active-view"
-        );
+    else if (view === "favorites") {
+
+        favorites.style.display = "block";
 
         document
             .getElementById("favoritesBtn")
@@ -1011,22 +995,25 @@ function showView(view) {
 
         document.getElementById(
             "pageTitle"
-        ).textContent =
-            "Favorites";
+        ).textContent = "Favorites";
 
         document.getElementById(
             "pageSubtitle"
         ).textContent =
             "Your favorite conversations";
 
+        renderFavorites();
+
     }
 
 
-    if (view === "settings") {
+    /* ---------------------------------------------
+       SETTINGS
+    --------------------------------------------- */
 
-        settings.classList.add(
-            "active-view"
-        );
+    else if (view === "settings") {
+
+        settings.style.display = "block";
 
         document
             .getElementById("settingsBtn")
@@ -1034,19 +1021,16 @@ function showView(view) {
 
         document.getElementById(
             "pageTitle"
-        ).textContent =
-            "Settings";
+        ).textContent = "Settings";
 
         document.getElementById(
             "pageSubtitle"
         ).textContent =
-            "Manage your preferences";
+            "Manage your account preferences";
 
     }
 
 }
-
-
 /* =====================================================
    SAVE CHAT
 ===================================================== */
