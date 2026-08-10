@@ -8,61 +8,283 @@
    ELEMENTS
 ===================================================== */
 
-const chatMessages =
-    document.getElementById("chatMessages");
+const chatMessages = document.getElementById("chatMessages");
+const messageInput = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const saveChatBtn = document.getElementById("saveChatBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-const messageInput =
-    document.getElementById("messageInput");
+const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-const sendBtn =
-    document.getElementById("sendBtn");
 
-const saveChatBtn =
-    document.getElementById("saveChatBtn");
+/* =====================================================
+   SAFE ELEMENT HELPER
+===================================================== */
 
-const logoutBtn =
-    document.getElementById("logoutBtn");
-
-const sidebar =
-    document.getElementById("sidebar");
-
-const menuBtn =
-    document.getElementById("menuBtn");
-
-const sidebarOverlay =
-    document.getElementById("sidebarOverlay");
+function getElement(id) {
+    return document.getElementById(id);
+}
 
 
 /* =====================================================
    USER INFORMATION
 ===================================================== */
 
+/*
+   We check multiple possible storage formats.
+
+   Priority:
+   1. username
+   2. name
+   3. user object
+   4. currentUser object
+   5. loggedInUser object
+   6. email username
+   7. User
+*/
+
+function getLoggedInUser() {
+
+    let username = "";
+    let email = "";
+
+
+    /* ---------------------------------------------
+       Direct username
+    --------------------------------------------- */
+
+    username =
+        localStorage.getItem("username") ||
+        localStorage.getItem("name") ||
+        "";
+
+
+    /* ---------------------------------------------
+       Direct email
+    --------------------------------------------- */
+
+    email =
+        localStorage.getItem("email") ||
+        "";
+
+
+    /* ---------------------------------------------
+       Check user object
+    --------------------------------------------- */
+
+    const possibleUserKeys = [
+        "user",
+        "currentUser",
+        "loggedInUser"
+    ];
+
+
+    for (const key of possibleUserKeys) {
+
+        const storedUser =
+            localStorage.getItem(key);
+
+        if (!storedUser) {
+            continue;
+        }
+
+
+        try {
+
+            const userObject =
+                JSON.parse(storedUser);
+
+
+            if (
+                typeof userObject === "object" &&
+                userObject !== null
+            ) {
+
+                username =
+                    username ||
+                    userObject.username ||
+                    userObject.name ||
+                    userObject.fullName ||
+                    userObject.displayName ||
+                    "";
+
+
+                email =
+                    email ||
+                    userObject.email ||
+                    "";
+
+            }
+
+        }
+
+        catch {
+
+            /*
+               If the stored value is just a
+               plain username, use it.
+            */
+
+            if (!username) {
+                username = storedUser;
+            }
+
+        }
+
+    }
+
+
+    /* ---------------------------------------------
+       Check loginUser
+    --------------------------------------------- */
+
+    const loginUser =
+        localStorage.getItem("loginUser");
+
+
+    if (loginUser) {
+
+        try {
+
+            const userObject =
+                JSON.parse(loginUser);
+
+
+            if (
+                typeof userObject === "object" &&
+                userObject !== null
+            ) {
+
+                username =
+                    username ||
+                    userObject.username ||
+                    userObject.name ||
+                    userObject.fullName ||
+                    userObject.displayName ||
+                    "";
+
+
+                email =
+                    email ||
+                    userObject.email ||
+                    "";
+
+            }
+
+        }
+
+        catch {
+
+            if (!username) {
+                username = loginUser;
+            }
+
+        }
+
+    }
+
+
+    /* ---------------------------------------------
+       If username is still empty,
+       use email before @
+    --------------------------------------------- */
+
+    if (
+        !username &&
+        email
+    ) {
+
+        username =
+            email.split("@")[0];
+
+    }
+
+
+    /* ---------------------------------------------
+       Final fallback
+    --------------------------------------------- */
+
+    if (!username) {
+        username = "User";
+    }
+
+
+    return {
+        username: username,
+        email: email
+    };
+
+}
+
+
+const loggedInUser =
+    getLoggedInUser();
+
+
 const username =
-    localStorage.getItem("username") || "User";
+    loggedInUser.username;
+
 
 const email =
-    localStorage.getItem("email") || "";
+    loggedInUser.email;
 
 
-document.getElementById(
-    "sidebarUsername"
-).textContent = username;
+/* =====================================================
+   DISPLAY USERNAME EVERYWHERE
+===================================================== */
+
+function displayUserInformation() {
+
+    const sidebarUsername =
+        getElement("sidebarUsername");
+
+    const topUsername =
+        getElement("topUsername");
+
+    const welcomeUsername =
+        getElement("welcomeUsername");
+
+    const settingsEmail =
+        getElement("settingsEmail");
 
 
-document.getElementById(
-    "topUsername"
-).textContent = username;
+    if (sidebarUsername) {
+
+        sidebarUsername.textContent =
+            username;
+
+    }
 
 
-document.getElementById(
-    "welcomeUsername"
-).textContent = username;
+    if (topUsername) {
+
+        topUsername.textContent =
+            username;
+
+    }
 
 
-document.getElementById(
-    "settingsEmail"
-).textContent =
-    email || "Not available";
+    if (welcomeUsername) {
+
+        welcomeUsername.textContent =
+            username;
+
+    }
+
+
+    if (settingsEmail) {
+
+        settingsEmail.textContent =
+            email || "Not available";
+
+    }
+
+}
+
+
+displayUserInformation();
 
 
 /* =====================================================
@@ -87,7 +309,7 @@ const FAVORITES_KEY =
 
 
 /* =====================================================
-   GET LOCAL DATA
+   LOCAL STORAGE HELPERS
 ===================================================== */
 
 function getData(key) {
@@ -123,13 +345,19 @@ function saveData(key, data) {
    MARKDOWN
 ===================================================== */
 
-marked.setOptions({
+if (
+    typeof marked !== "undefined"
+) {
 
-    breaks: true,
+    marked.setOptions({
 
-    gfm: true
+        breaks: true,
 
-});
+        gfm: true
+
+    });
+
+}
 
 
 /* =====================================================
@@ -138,20 +366,27 @@ marked.setOptions({
 
 function showWelcomeMessage() {
 
+    if (!chatMessages) {
+        return;
+    }
+
+
     chatMessages.innerHTML = "";
 
     conversation = [];
 
+
     addMessage(
+
         "👋 Hello! Welcome to **Secure AI Assistant**. How can I help you today?",
+
         "bot",
+
         false
+
     );
 
 }
-
-
-showWelcomeMessage();
 
 
 /* =====================================================
@@ -163,6 +398,10 @@ function addMessage(
     type,
     save = true
 ) {
+
+    if (!chatMessages) {
+        return;
+    }
 
 
     const row =
@@ -199,28 +438,71 @@ function addMessage(
         );
 
 
-    /* ==============================================
-       USER
-    ============================================== */
+    /* ---------------------------------------------
+       USER MESSAGE
+    --------------------------------------------- */
 
-    if (type === "user") {
+    if (
+        type === "user"
+    ) {
 
-        message.textContent = text;
+        message.textContent =
+            text;
 
     }
 
 
-    /* ==============================================
-       AI
-    ============================================== */
+    /* ---------------------------------------------
+       AI MESSAGE
+    --------------------------------------------- */
 
     else {
 
-        const html =
-            marked.parse(text);
+        let html = "";
 
-        message.innerHTML =
-            DOMPurify.sanitize(html);
+
+        if (
+            typeof marked !== "undefined"
+        ) {
+
+            html =
+                marked.parse(
+                    String(text)
+                );
+
+        }
+
+        else {
+
+            /*
+               Fallback if marked is not loaded
+            */
+
+            html =
+                String(text)
+                    .replace(
+                        /\n/g,
+                        "<br>"
+                    );
+
+        }
+
+
+        if (
+            typeof DOMPurify !== "undefined"
+        ) {
+
+            message.innerHTML =
+                DOMPurify.sanitize(html);
+
+        }
+
+        else {
+
+            message.textContent =
+                text;
+
+        }
 
     }
 
@@ -228,11 +510,13 @@ function addMessage(
     wrapper.appendChild(message);
 
 
-    /* ==============================================
+    /* =================================================
        COPY BUTTON
-    ============================================== */
+    ================================================= */
 
-    if (type === "bot") {
+    if (
+        type === "bot"
+    ) {
 
         const copyBtn =
             document.createElement("button");
@@ -253,17 +537,24 @@ function addMessage(
                 try {
 
                     await navigator.clipboard
-                        .writeText(text);
+                        .writeText(
+                            String(text)
+                        );
+
 
                     copyBtn.innerHTML =
                         '<i class="fa-solid fa-check"></i> Copied';
 
-                    setTimeout(() => {
 
-                        copyBtn.innerHTML =
-                            '<i class="fa-regular fa-copy"></i> Copy';
+                    setTimeout(
+                        () => {
 
-                    }, 1500);
+                            copyBtn.innerHTML =
+                                '<i class="fa-regular fa-copy"></i> Copy';
+
+                        },
+                        1500
+                    );
 
                 }
 
@@ -278,16 +569,20 @@ function addMessage(
         );
 
 
-        wrapper.appendChild(copyBtn);
+        wrapper.appendChild(
+            copyBtn
+        );
 
     }
 
 
-    /* ==============================================
+    /* =================================================
        AI AVATAR
-    ============================================== */
+    ================================================= */
 
-    if (type === "bot") {
+    if (
+        type === "bot"
+    ) {
 
         const avatar =
             document.createElement("div");
@@ -301,20 +596,26 @@ function addMessage(
             '<i class="fa-solid fa-robot"></i>';
 
 
-        row.appendChild(avatar);
+        row.appendChild(
+            avatar
+        );
 
     }
 
 
-    row.appendChild(wrapper);
+    row.appendChild(
+        wrapper
+    );
 
 
-    chatMessages.appendChild(row);
+    chatMessages.appendChild(
+        row
+    );
 
 
-    /* ==============================================
+    /* =================================================
        SAVE CURRENT CONVERSATION
-    ============================================== */
+    ================================================= */
 
     if (save) {
 
@@ -343,9 +644,9 @@ function addMessage(
     }
 
 
-    /* ==============================================
+    /* =================================================
        SCROLL
-    ============================================== */
+    ================================================= */
 
     chatMessages.scrollTop =
         chatMessages.scrollHeight;
@@ -358,6 +659,13 @@ function addMessage(
 ===================================================== */
 
 function showTyping() {
+
+    if (!chatMessages) {
+        return;
+    }
+
+
+    removeTyping();
 
 
     const row =
@@ -407,11 +715,19 @@ function showTyping() {
     `;
 
 
-    row.appendChild(avatar);
+    row.appendChild(
+        avatar
+    );
 
-    row.appendChild(message);
 
-    chatMessages.appendChild(row);
+    row.appendChild(
+        message
+    );
+
+
+    chatMessages.appendChild(
+        row
+    );
 
 
     chatMessages.scrollTop =
@@ -427,7 +743,7 @@ function showTyping() {
 function removeTyping() {
 
     const typing =
-        document.getElementById(
+        getElement(
             "typingMessage"
         );
 
@@ -447,21 +763,28 @@ function removeTyping() {
 
 async function sendMessage() {
 
-
-    const text =
-        messageInput.value.trim();
-
-
-    if (!text) {
+    if (
+        !messageInput ||
+        !sendBtn
+    ) {
 
         return;
 
     }
 
 
-    /* ==============================================
+    const text =
+        messageInput.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    /* ---------------------------------------------
        SHOW USER MESSAGE
-    ============================================== */
+    --------------------------------------------- */
 
     addMessage(
         text,
@@ -471,6 +794,7 @@ async function sendMessage() {
 
 
     messageInput.value = "";
+
 
     messageInput.style.height =
         "50px";
@@ -485,6 +809,9 @@ async function sendMessage() {
 
     try {
 
+        /* -----------------------------------------
+           TOKEN
+        ----------------------------------------- */
 
         const token =
             localStorage.getItem(
@@ -510,13 +837,15 @@ async function sendMessage() {
         }
 
 
-        /* ==========================================
+        /* -----------------------------------------
            CALL FLASK BACKEND
-        ========================================== */
+        ----------------------------------------- */
 
         const response =
             await fetch(
+
                 "http://127.0.0.1:5000/chat",
+
                 {
 
                     method: "POST",
@@ -530,6 +859,7 @@ async function sendMessage() {
                     })
 
                 }
+
             );
 
 
@@ -540,9 +870,9 @@ async function sendMessage() {
         removeTyping();
 
 
-        /* ==========================================
-           RESPONSE
-        ========================================== */
+        /* -----------------------------------------
+           BACKEND ERROR
+        ----------------------------------------- */
 
         if (
             data.success === false
@@ -550,6 +880,7 @@ async function sendMessage() {
 
             addMessage(
 
+                data.error ||
                 data.message ||
                 "Something went wrong.",
 
@@ -564,11 +895,20 @@ async function sendMessage() {
         }
 
 
+        /* -----------------------------------------
+           FIND RESPONSE
+        ----------------------------------------- */
+
         const answer =
+
             data.response ||
+
             data.message ||
+
             data.reply ||
+
             data.answer ||
+
             data.result;
 
 
@@ -589,6 +929,10 @@ async function sendMessage() {
         }
 
 
+        /* -----------------------------------------
+           SHOW AI RESPONSE
+        ----------------------------------------- */
+
         addMessage(
 
             answer,
@@ -599,8 +943,8 @@ async function sendMessage() {
 
         );
 
-
     }
+
 
     catch (error) {
 
@@ -631,6 +975,7 @@ async function sendMessage() {
         sendBtn.disabled =
             false;
 
+
         messageInput.focus();
 
     }
@@ -642,407 +987,657 @@ async function sendMessage() {
    SEND BUTTON
 ===================================================== */
 
-sendBtn.addEventListener(
-    "click",
-    sendMessage
-);
+if (sendBtn) {
+
+    sendBtn.addEventListener(
+        "click",
+        sendMessage
+    );
+
+}
 
 
 /* =====================================================
    ENTER KEY
 ===================================================== */
 
-messageInput.addEventListener(
-    "keydown",
-    (event) => {
+if (messageInput) {
+
+    messageInput.addEventListener(
+        "keydown",
+        (event) => {
+
+            const enterCheckbox =
+                getElement(
+                    "enterToSend"
+                );
 
 
-        const enterEnabled =
-            document.getElementById(
-                "enterToSend"
-            ).checked;
+            const enterEnabled =
+                !enterCheckbox ||
+                enterCheckbox.checked;
 
 
-        if (
+            if (
 
-            event.key === "Enter" &&
+                event.key === "Enter" &&
 
-            !event.shiftKey &&
+                !event.shiftKey &&
 
-            enterEnabled
+                enterEnabled
 
-        ) {
+            ) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            sendMessage();
+                sendMessage();
+
+            }
 
         }
+    );
 
-    }
-);
+}
 
 
 /* =====================================================
    AUTO RESIZE TEXTAREA
 ===================================================== */
 
-messageInput.addEventListener(
-    "input",
-    () => {
+if (messageInput) {
 
-        messageInput.style.height =
-            "auto";
+    messageInput.addEventListener(
+        "input",
+        () => {
+
+            messageInput.style.height =
+                "auto";
 
 
-        messageInput.style.height =
-            Math.min(
-                messageInput.scrollHeight,
-                150
-            ) + "px";
+            messageInput.style.height =
 
-    }
-);
+                Math.min(
+
+                    messageInput.scrollHeight,
+
+                    150
+
+                ) + "px";
+
+        }
+    );
+
+}
 
 
 /* =====================================================
    NEW CHAT
 ===================================================== */
 
-document
-    .getElementById("newChatBtn")
-    .addEventListener(
+const newChatBtn =
+    getElement("newChatBtn");
+
+
+if (newChatBtn) {
+
+    newChatBtn.addEventListener(
         "click",
         () => {
 
             conversation = [];
 
+
             localStorage.removeItem(
                 "currentConversation"
             );
 
+
             showWelcomeMessage();
 
-            showView("chat");
+
+            showView(
+                "chat"
+            );
+
 
             closeSidebar();
 
         }
     );
+
+}
 
 
 /* =====================================================
    CHAT BUTTON
 ===================================================== */
 
-document
-    .getElementById("chatBtn")
-    .addEventListener(
+const chatBtn =
+    getElement("chatBtn");
+
+
+if (chatBtn) {
+
+    chatBtn.addEventListener(
         "click",
         () => {
 
-            showView("chat");
+            showView(
+                "chat"
+            );
+
 
             closeSidebar();
 
         }
     );
 
+}
+
 
 /* =====================================================
-   FEATURE CARD
+   AI CHAT CARD
 ===================================================== */
 
-document
-    .getElementById("aiChatCard")
-    .addEventListener(
+const aiChatCard =
+    getElement("aiChatCard");
+
+
+if (aiChatCard) {
+
+    aiChatCard.addEventListener(
         "click",
         () => {
 
-            showView("chat");
+            showView(
+                "chat"
+            );
 
         }
     );
+
+}
 
 
 /* =====================================================
    HISTORY BUTTON
 ===================================================== */
 
-document
-    .getElementById("historyBtn")
-    .addEventListener(
+const historyBtn =
+    getElement("historyBtn");
+
+
+if (historyBtn) {
+
+    historyBtn.addEventListener(
         "click",
         () => {
 
             renderHistory();
 
-            showView("history");
+            showView(
+                "history"
+            );
 
             closeSidebar();
 
         }
     );
 
+}
 
-document
-    .getElementById("historyCard")
-    .addEventListener(
+
+/* =====================================================
+   HISTORY CARD
+===================================================== */
+
+const historyCard =
+    getElement("historyCard");
+
+
+if (historyCard) {
+
+    historyCard.addEventListener(
         "click",
         () => {
 
             renderHistory();
 
-            showView("history");
+            showView(
+                "history"
+            );
 
         }
     );
+
+}
 
 
 /* =====================================================
    SAVED CHATS
 ===================================================== */
 
-document
-    .getElementById("savedChatsBtn")
-    .addEventListener(
+const savedChatsBtn =
+    getElement(
+        "savedChatsBtn"
+    );
+
+
+if (savedChatsBtn) {
+
+    savedChatsBtn.addEventListener(
         "click",
         () => {
 
             renderSaved();
 
-            showView("saved");
+            showView(
+                "saved"
+            );
 
             closeSidebar();
 
         }
     );
+
+}
 
 
 /* =====================================================
    FAVORITES
 ===================================================== */
 
-document
-    .getElementById("favoritesBtn")
-    .addEventListener(
+const favoritesBtn =
+    getElement(
+        "favoritesBtn"
+    );
+
+
+if (favoritesBtn) {
+
+    favoritesBtn.addEventListener(
         "click",
         () => {
 
             renderFavorites();
 
-            showView("favorites");
+            showView(
+                "favorites"
+            );
 
             closeSidebar();
 
         }
     );
+
+}
 
 
 /* =====================================================
    SETTINGS
 ===================================================== */
 
-document
-    .getElementById("settingsBtn")
-    .addEventListener(
+const settingsBtn =
+    getElement(
+        "settingsBtn"
+    );
+
+
+if (settingsBtn) {
+
+    settingsBtn.addEventListener(
         "click",
         () => {
 
-            showView("settings");
+            showView(
+                "settings"
+            );
 
             closeSidebar();
 
         }
     );
 
+}
+
 
 /* =====================================================
    SHOW VIEW
 ===================================================== */
 
-/* =====================================================
-   SHOW ONLY ONE VIEW AT A TIME
-===================================================== */
-
 function showView(view) {
 
     const dashboard =
-        document.getElementById("dashboardView");
+        getElement(
+            "dashboardView"
+        );
 
     const history =
-        document.getElementById("historyView");
+        getElement(
+            "historyView"
+        );
 
     const saved =
-        document.getElementById("savedView");
+        getElement(
+            "savedView"
+        );
 
     const favorites =
-        document.getElementById("favoritesView");
+        getElement(
+            "favoritesView"
+        );
 
     const settings =
-        document.getElementById("settingsView");
+        getElement(
+            "settingsView"
+        );
 
 
     /* ---------------------------------------------
-       HIDE ALL VIEWS FIRST
+       Hide all
     --------------------------------------------- */
 
-    dashboard.style.display = "none";
-    history.style.display = "none";
-    saved.style.display = "none";
-    favorites.style.display = "none";
-    settings.style.display = "none";
+    if (dashboard) {
+        dashboard.style.display =
+            "none";
+    }
 
 
-    /* Remove active class from sidebar */
-
-    document
-        .querySelectorAll(".nav-item")
-        .forEach(button => {
-
-            button.classList.remove("active");
-
-        });
+    if (history) {
+        history.style.display =
+            "none";
+    }
 
 
-    /* ---------------------------------------------
-       CHAT
-    --------------------------------------------- */
+    if (saved) {
+        saved.style.display =
+            "none";
+    }
 
-    if (view === "chat") {
 
-        dashboard.style.display = "block";
+    if (favorites) {
+        favorites.style.display =
+            "none";
+    }
 
-        document
-            .getElementById("chatBtn")
-            .classList.add("active");
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent = "AI Assistant";
-
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            "Ask anything and get intelligent answers";
-
+    if (settings) {
+        settings.style.display =
+            "none";
     }
 
 
     /* ---------------------------------------------
-       CHAT HISTORY
+       Remove active
     --------------------------------------------- */
 
-    else if (view === "history") {
+    document
+        .querySelectorAll(
+            ".nav-item"
+        )
+        .forEach(
+            button => {
 
-        history.style.display = "block";
+                button.classList.remove(
+                    "active"
+                );
 
-        document
-            .getElementById("historyBtn")
-            .classList.add("active");
+            }
+        );
 
-        document.getElementById(
+
+    const pageTitle =
+        getElement(
             "pageTitle"
-        ).textContent = "Chat History";
+        );
 
-        document.getElementById(
+    const pageSubtitle =
+        getElement(
             "pageSubtitle"
-        ).textContent =
-            "View and manage your previous conversations";
+        );
+
+
+    /* =================================================
+       CHAT
+    ================================================= */
+
+    if (
+        view === "chat"
+    ) {
+
+        if (dashboard) {
+
+            dashboard.style.display =
+                "block";
+
+        }
+
+
+        if (chatBtn) {
+
+            chatBtn.classList.add(
+                "active"
+            );
+
+        }
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "AI Assistant";
+
+        }
+
+
+        if (pageSubtitle) {
+
+            pageSubtitle.textContent =
+                "Ask anything and get intelligent answers";
+
+        }
+
+    }
+
+
+    /* =================================================
+       HISTORY
+    ================================================= */
+
+    else if (
+        view === "history"
+    ) {
+
+        if (history) {
+
+            history.style.display =
+                "block";
+
+        }
+
+
+        if (historyBtn) {
+
+            historyBtn.classList.add(
+                "active"
+            );
+
+        }
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "Chat History";
+
+        }
+
+
+        if (pageSubtitle) {
+
+            pageSubtitle.textContent =
+                "View and manage your previous conversations";
+
+        }
+
 
         renderHistory();
 
     }
 
 
-    /* ---------------------------------------------
-       SAVED CHATS
-    --------------------------------------------- */
+    /* =================================================
+       SAVED
+    ================================================= */
 
-    else if (view === "saved") {
+    else if (
+        view === "saved"
+    ) {
 
-        saved.style.display = "block";
+        if (saved) {
 
-        document
-            .getElementById("savedChatsBtn")
-            .classList.add("active");
+            saved.style.display =
+                "block";
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent = "Saved Chats";
+        }
 
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            "Your saved conversations";
+
+        if (savedChatsBtn) {
+
+            savedChatsBtn.classList.add(
+                "active"
+            );
+
+        }
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "Saved Chats";
+
+        }
+
+
+        if (pageSubtitle) {
+
+            pageSubtitle.textContent =
+                "Your saved conversations";
+
+        }
+
 
         renderSaved();
 
     }
 
 
-    /* ---------------------------------------------
+    /* =================================================
        FAVORITES
-    --------------------------------------------- */
+    ================================================= */
 
-    else if (view === "favorites") {
+    else if (
+        view === "favorites"
+    ) {
 
-        favorites.style.display = "block";
+        if (favorites) {
 
-        document
-            .getElementById("favoritesBtn")
-            .classList.add("active");
+            favorites.style.display =
+                "block";
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent = "Favorites";
+        }
 
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            "Your favorite conversations";
+
+        if (favoritesBtn) {
+
+            favoritesBtn.classList.add(
+                "active"
+            );
+
+        }
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "Favorites";
+
+        }
+
+
+        if (pageSubtitle) {
+
+            pageSubtitle.textContent =
+                "Your favorite conversations";
+
+        }
+
 
         renderFavorites();
 
     }
 
 
-    /* ---------------------------------------------
+    /* =================================================
        SETTINGS
-    --------------------------------------------- */
+    ================================================= */
 
-    else if (view === "settings") {
+    else if (
+        view === "settings"
+    ) {
 
-        settings.style.display = "block";
+        if (settings) {
 
-        document
-            .getElementById("settingsBtn")
-            .classList.add("active");
+            settings.style.display =
+                "block";
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent = "Settings";
+        }
 
-        document.getElementById(
-            "pageSubtitle"
-        ).textContent =
-            "Manage your account preferences";
+
+        if (settingsBtn) {
+
+            settingsBtn.classList.add(
+                "active"
+            );
+
+        }
+
+
+        if (pageTitle) {
+
+            pageTitle.textContent =
+                "Settings";
+
+        }
+
+
+        if (pageSubtitle) {
+
+            pageSubtitle.textContent =
+                "Manage your account preferences";
+
+        }
 
     }
 
 }
+
+
 /* =====================================================
    SAVE CHAT
 ===================================================== */
 
-saveChatBtn.addEventListener(
-    "click",
-    saveCurrentChat
-);
+if (saveChatBtn) {
+
+    saveChatBtn.addEventListener(
+        "click",
+        saveCurrentChat
+    );
+
+}
 
 
 function saveCurrentChat() {
-
 
     if (
         conversation.length === 0
@@ -1058,12 +1653,15 @@ function saveCurrentChat() {
 
 
     const saved =
-        getData(SAVED_KEY);
+        getData(
+            SAVED_KEY
+        );
 
 
     const chat = {
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         title:
             getChatTitle(),
@@ -1080,7 +1678,9 @@ function saveCurrentChat() {
     };
 
 
-    saved.unshift(chat);
+    saved.unshift(
+        chat
+    );
 
 
     saveData(
@@ -1102,7 +1702,6 @@ function saveCurrentChat() {
 
 function getChatTitle() {
 
-
     const firstUserMessage =
         conversation.find(
             item =>
@@ -1120,7 +1719,10 @@ function getChatTitle() {
 
 
     return firstUserMessage.text
-        .substring(0, 60);
+        .substring(
+            0,
+            60
+        );
 
 }
 
@@ -1130,7 +1732,6 @@ function getChatTitle() {
 ===================================================== */
 
 function saveToHistory() {
-
 
     if (
         conversation.length === 0
@@ -1142,12 +1743,15 @@ function saveToHistory() {
 
 
     const history =
-        getData(HISTORY_KEY);
+        getData(
+            HISTORY_KEY
+        );
 
 
     const chat = {
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
         title:
             getChatTitle(),
@@ -1161,32 +1765,46 @@ function saveToHistory() {
     };
 
 
-    history.unshift(chat);
+    history.unshift(
+        chat
+    );
 
 
     saveData(
+
         HISTORY_KEY,
-        history.slice(0, 50)
+
+        history.slice(
+            0,
+            50
+        )
+
     );
 
 }
 
 
 /* =====================================================
-   HISTORY
+   RENDER HISTORY
 ===================================================== */
 
 function renderHistory() {
 
-
     const list =
-        document.getElementById(
+        getElement(
             "historyList"
         );
 
 
+    if (!list) {
+        return;
+    }
+
+
     const history =
-        getData(HISTORY_KEY);
+        getData(
+            HISTORY_KEY
+        );
 
 
     if (
@@ -1214,38 +1832,49 @@ function renderHistory() {
     }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+        "";
 
 
-    history.forEach(chat => {
+    history.forEach(
+        chat => {
 
-        list.appendChild(
-            createConversationCard(
-                chat,
-                "history"
-            )
-        );
+            list.appendChild(
 
-    });
+                createConversationCard(
+                    chat,
+                    "history"
+                )
+
+            );
+
+        }
+    );
 
 }
 
 
 /* =====================================================
-   SAVED
+   RENDER SAVED
 ===================================================== */
 
 function renderSaved() {
 
-
     const list =
-        document.getElementById(
+        getElement(
             "savedList"
         );
 
 
+    if (!list) {
+        return;
+    }
+
+
     const saved =
-        getData(SAVED_KEY);
+        getData(
+            SAVED_KEY
+        );
 
 
     if (
@@ -1273,43 +1902,55 @@ function renderSaved() {
     }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+        "";
 
 
-    saved.forEach(chat => {
+    saved.forEach(
+        chat => {
 
-        list.appendChild(
-            createConversationCard(
-                chat,
-                "saved"
-            )
-        );
+            list.appendChild(
 
-    });
+                createConversationCard(
+                    chat,
+                    "saved"
+                )
+
+            );
+
+        }
+    );
 
 }
 
 
 /* =====================================================
-   FAVORITES
+   RENDER FAVORITES
 ===================================================== */
 
 function renderFavorites() {
 
-
     const list =
-        document.getElementById(
+        getElement(
             "favoritesList"
         );
 
 
+    if (!list) {
+        return;
+    }
+
+
     const saved =
-        getData(SAVED_KEY);
+        getData(
+            SAVED_KEY
+        );
 
 
     const favorites =
         saved.filter(
-            chat => chat.favorite
+            chat =>
+                chat.favorite
         );
 
 
@@ -1338,19 +1979,24 @@ function renderFavorites() {
     }
 
 
-    list.innerHTML = "";
+    list.innerHTML =
+        "";
 
 
-    favorites.forEach(chat => {
+    favorites.forEach(
+        chat => {
 
-        list.appendChild(
-            createConversationCard(
-                chat,
-                "favorite"
-            )
-        );
+            list.appendChild(
 
-    });
+                createConversationCard(
+                    chat,
+                    "favorite"
+                )
+
+            );
+
+        }
+    );
 
 }
 
@@ -1364,9 +2010,10 @@ function createConversationCard(
     type
 ) {
 
-
     const card =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     card.className =
@@ -1374,7 +2021,9 @@ function createConversationCard(
 
 
     const info =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     info.className =
@@ -1382,7 +2031,9 @@ function createConversationCard(
 
 
     const title =
-        document.createElement("h3");
+        document.createElement(
+            "h3"
+        );
 
 
     title.textContent =
@@ -1390,7 +2041,9 @@ function createConversationCard(
 
 
     const date =
-        document.createElement("p");
+        document.createElement(
+            "p"
+        );
 
 
     date.textContent =
@@ -1399,23 +2052,34 @@ function createConversationCard(
         ).toLocaleString();
 
 
-    info.appendChild(title);
+    info.appendChild(
+        title
+    );
 
-    info.appendChild(date);
+
+    info.appendChild(
+        date
+    );
 
 
     const actions =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     actions.className =
         "conversation-actions";
 
 
-    /* Open */
+    /* =================================================
+       OPEN BUTTON
+    ================================================= */
 
     const openBtn =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
 
     openBtn.className =
@@ -1438,7 +2102,10 @@ function createConversationCard(
                 chat
             );
 
-            showView("chat");
+
+            showView(
+                "chat"
+            );
 
         }
     );
@@ -1449,15 +2116,22 @@ function createConversationCard(
     );
 
 
-    /* Favorite */
+    /* =================================================
+       FAVORITE BUTTON
+    ================================================= */
 
     if (
+
         type === "saved" ||
+
         type === "favorite"
+
     ) {
 
         const favoriteBtn =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
 
 
         favoriteBtn.className =
@@ -1465,6 +2139,7 @@ function createConversationCard(
 
 
         favoriteBtn.innerHTML =
+
             chat.favorite
 
                 ? '<i class="fa-solid fa-star"></i>'
@@ -1495,10 +2170,14 @@ function createConversationCard(
     }
 
 
-    /* Delete */
+    /* =================================================
+       DELETE BUTTON
+    ================================================= */
 
     const deleteBtn =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
 
 
     deleteBtn.className =
@@ -1531,9 +2210,14 @@ function createConversationCard(
     );
 
 
-    card.appendChild(info);
+    card.appendChild(
+        info
+    );
 
-    card.appendChild(actions);
+
+    card.appendChild(
+        actions
+    );
 
 
     return card;
@@ -1549,22 +2233,29 @@ function loadConversation(
     chat
 ) {
 
-
     conversation =
         [...chat.messages];
 
 
-    chatMessages.innerHTML =
-        "";
+    if (chatMessages) {
+
+        chatMessages.innerHTML =
+            "";
+
+    }
 
 
     conversation.forEach(
         item => {
 
             addMessage(
+
                 item.text,
+
                 item.type,
+
                 false
+
             );
 
         }
@@ -1585,28 +2276,28 @@ function loadConversation(
 
 
 /* =====================================================
-   FAVORITE
+   TOGGLE FAVORITE
 ===================================================== */
 
 function toggleFavorite(
     id
 ) {
 
-
     const saved =
-        getData(SAVED_KEY);
+        getData(
+            SAVED_KEY
+        );
 
 
     const chat =
         saved.find(
-            item => item.id === id
+            item =>
+                item.id === id
         );
 
 
     if (!chat) {
-
         return;
-
     }
 
 
@@ -1636,7 +2327,6 @@ function deleteConversation(
     type
 ) {
 
-
     if (
         !confirm(
             "Delete this conversation?"
@@ -1649,12 +2339,17 @@ function deleteConversation(
 
 
     if (
+
         type === "saved" ||
+
         type === "favorite"
+
     ) {
 
         let saved =
-            getData(SAVED_KEY);
+            getData(
+                SAVED_KEY
+            );
 
 
         saved =
@@ -1680,7 +2375,9 @@ function deleteConversation(
     else {
 
         let history =
-            getData(HISTORY_KEY);
+            getData(
+                HISTORY_KEY
+            );
 
 
         history =
@@ -1707,14 +2404,17 @@ function deleteConversation(
    CLEAR HISTORY
 ===================================================== */
 
-document
-    .getElementById(
+const clearHistoryBtn =
+    getElement(
         "clearHistoryBtn"
-    )
-    .addEventListener(
+    );
+
+
+if (clearHistoryBtn) {
+
+    clearHistoryBtn.addEventListener(
         "click",
         () => {
-
 
             if (
                 !confirm(
@@ -1737,42 +2437,70 @@ document
         }
     );
 
+}
+
 
 /* =====================================================
    MOBILE MENU
 ===================================================== */
 
-menuBtn.addEventListener(
-    "click",
-    () => {
+if (menuBtn) {
 
-        sidebar.classList.add(
-            "open"
-        );
+    menuBtn.addEventListener(
+        "click",
+        () => {
 
-        sidebarOverlay.classList.add(
-            "show"
-        );
+            if (sidebar) {
 
-    }
-);
+                sidebar.classList.add(
+                    "open"
+                );
+
+            }
 
 
-sidebarOverlay.addEventListener(
-    "click",
-    closeSidebar
-);
+            if (sidebarOverlay) {
+
+                sidebarOverlay.classList.add(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+if (sidebarOverlay) {
+
+    sidebarOverlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+}
 
 
 function closeSidebar() {
 
-    sidebar.classList.remove(
-        "open"
-    );
+    if (sidebar) {
 
-    sidebarOverlay.classList.remove(
-        "show"
-    );
+        sidebar.classList.remove(
+            "open"
+        );
+
+    }
+
+
+    if (sidebarOverlay) {
+
+        sidebarOverlay.classList.remove(
+            "show"
+        );
+
+    }
 
 }
 
@@ -1781,44 +2509,75 @@ function closeSidebar() {
    LOGOUT
 ===================================================== */
 
-logoutBtn.addEventListener(
-    "click",
-    () => {
+if (logoutBtn) {
+
+    logoutBtn.addEventListener(
+        "click",
+        () => {
+
+            if (
+                !confirm(
+                    "Are you sure you want to logout?"
+                )
+            ) {
+
+                return;
+
+            }
 
 
-        if (
-            !confirm(
-                "Are you sure you want to logout?"
-            )
-        ) {
+            localStorage.removeItem(
+                "token"
+            );
 
-            return;
+
+            localStorage.removeItem(
+                "username"
+            );
+
+
+            localStorage.removeItem(
+                "name"
+            );
+
+
+            localStorage.removeItem(
+                "email"
+            );
+
+
+            localStorage.removeItem(
+                "user"
+            );
+
+
+            localStorage.removeItem(
+                "currentUser"
+            );
+
+
+            localStorage.removeItem(
+                "loggedInUser"
+            );
+
+
+            localStorage.removeItem(
+                "loginUser"
+            );
+
+
+            localStorage.removeItem(
+                "currentConversation"
+            );
+
+
+            window.location.href =
+                "login.html";
 
         }
+    );
 
-
-        localStorage.removeItem(
-            "token"
-        );
-
-        localStorage.removeItem(
-            "username"
-        );
-
-        localStorage.removeItem(
-            "email"
-        );
-
-        localStorage.removeItem(
-            "currentConversation"
-        );
-
-
-        window.location.href =
-            "login.html";
-
-    }
-);
+}
 
 
 /* =====================================================
@@ -1826,7 +2585,7 @@ logoutBtn.addEventListener(
 ===================================================== */
 
 const themeSelect =
-    document.getElementById(
+    getElement(
         "themeSelect"
     );
 
@@ -1845,47 +2604,58 @@ if (
         "dark"
     );
 
-    themeSelect.value =
-        "dark";
+
+    if (themeSelect) {
+
+        themeSelect.value =
+            "dark";
+
+    }
 
 }
 
 
-themeSelect.addEventListener(
-    "change",
-    () => {
+if (themeSelect) {
 
+    themeSelect.addEventListener(
+        "change",
+        () => {
 
-        if (
-            themeSelect.value === "dark"
-        ) {
-
-            document.body.classList.add(
+            if (
+                themeSelect.value ===
                 "dark"
-            );
+            ) {
 
-            localStorage.setItem(
-                "dashboardTheme",
-                "dark"
-            );
+                document.body.classList.add(
+                    "dark"
+                );
+
+
+                localStorage.setItem(
+                    "dashboardTheme",
+                    "dark"
+                );
+
+            }
+
+            else {
+
+                document.body.classList.remove(
+                    "dark"
+                );
+
+
+                localStorage.setItem(
+                    "dashboardTheme",
+                    "light"
+                );
+
+            }
 
         }
+    );
 
-        else {
-
-            document.body.classList.remove(
-                "dark"
-            );
-
-            localStorage.setItem(
-                "dashboardTheme",
-                "light"
-            );
-
-        }
-
-    }
-);
+}
 
 
 /* =====================================================
@@ -1893,7 +2663,7 @@ themeSelect.addEventListener(
 ===================================================== */
 
 const enterToSend =
-    document.getElementById(
+    getElement(
         "enterToSend"
     );
 
@@ -1905,43 +2675,53 @@ const savedEnterSetting =
 
 
 if (
-    savedEnterSetting === "false"
+    enterToSend
 ) {
 
-    enterToSend.checked =
-        false;
+    if (
+        savedEnterSetting ===
+        "false"
+    ) {
 
-}
-
-
-enterToSend.addEventListener(
-    "change",
-    () => {
-
-        localStorage.setItem(
-
-            "enterToSend",
-
-            enterToSend.checked
-
-        );
+        enterToSend.checked =
+            false;
 
     }
-);
+
+
+    enterToSend.addEventListener(
+        "change",
+        () => {
+
+            localStorage.setItem(
+
+                "enterToSend",
+
+                enterToSend.checked
+
+            );
+
+        }
+    );
+
+}
 
 
 /* =====================================================
    DELETE LOCAL DATA
 ===================================================== */
 
-document
-    .getElementById(
+const deleteLocalDataBtn =
+    getElement(
         "deleteLocalDataBtn"
-    )
-    .addEventListener(
+    );
+
+
+if (deleteLocalDataBtn) {
+
+    deleteLocalDataBtn.addEventListener(
         "click",
         () => {
-
 
             if (
                 !confirm(
@@ -1976,6 +2756,8 @@ document
         }
     );
 
+}
+
 
 /* =====================================================
    SAVE CURRENT CHAT TO HISTORY
@@ -2003,7 +2785,6 @@ window.addEventListener(
 
 function restoreConversation() {
 
-
     const stored =
         localStorage.getItem(
             "currentConversation"
@@ -2011,21 +2792,26 @@ function restoreConversation() {
 
 
     if (!stored) {
-
         return;
-
     }
 
 
     try {
 
         const messages =
-            JSON.parse(stored);
+            JSON.parse(
+                stored
+            );
 
 
         if (
-            !Array.isArray(messages) ||
+
+            !Array.isArray(
+                messages
+            ) ||
+
             messages.length === 0
+
         ) {
 
             return;
@@ -2037,23 +2823,32 @@ function restoreConversation() {
             messages;
 
 
-        chatMessages.innerHTML =
-            "";
+        if (chatMessages) {
+
+            chatMessages.innerHTML =
+                "";
+
+        }
 
 
         messages.forEach(
             item => {
 
                 addMessage(
+
                     item.text,
+
                     item.type,
+
                     false
+
                 );
 
             }
         );
 
     }
+
 
     catch (error) {
 
@@ -2071,4 +2866,38 @@ function restoreConversation() {
    INITIALIZE
 ===================================================== */
 
-restoreConversation();
+if (chatMessages) {
+
+    /*
+       Only show welcome message when
+       there is no existing conversation.
+    */
+
+    const existingConversation =
+        localStorage.getItem(
+            "currentConversation"
+        );
+
+
+    if (
+        existingConversation
+    ) {
+
+        restoreConversation();
+
+    }
+
+    else {
+
+        showWelcomeMessage();
+
+    }
+
+}
+
+
+/* =====================================================
+   DEFAULT VIEW
+===================================================== */
+
+showView("chat");

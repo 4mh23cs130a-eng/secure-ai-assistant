@@ -3,18 +3,14 @@
 ===================================================== */
 
 * {
-
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
 
     font-family:
         "Segoe UI",
         Arial,
         sans-serif;
-
 }
 
 
@@ -26,11 +22,12 @@
 
     --primary-light: #eef2ff;
 
-    --sidebar: linear-gradient(
-        180deg,
-        #4f46e5,
-        #7c3aed
-    );
+    --sidebar:
+        linear-gradient(
+            180deg,
+            #4f46e5,
+            #7c3aed
+        );
 
     --background: #f5f7fb;
 
@@ -41,7 +38,6 @@
     --muted: #64748b;
 
     --border: #e5e7eb;
-
 }
 
 
@@ -397,6 +393,38 @@ body {
 
 
 /* =====================================================
+   VIEWS
+===================================================== */
+
+.view {
+
+    display: none;
+
+}
+
+
+.view.active-view {
+
+    display: block;
+
+}
+
+
+.secondary-view {
+
+    display: none;
+
+}
+
+
+.secondary-view.active-view {
+
+    display: block;
+
+}
+
+
+/* =====================================================
    WELCOME
 ===================================================== */
 
@@ -651,7 +679,9 @@ body {
 }
 
 
-/* Messages */
+/* =====================================================
+   CHAT MESSAGES
+===================================================== */
 
 .chat-messages {
 
@@ -703,9 +733,9 @@ body {
 
 .message-avatar {
 
-    width: 34px;
+    width: 36px;
 
-    height: 34px;
+    height: 36px;
 
     flex-shrink: 0;
 
@@ -721,6 +751,19 @@ body {
 
     justify-content: center;
 
+    font-size: 15px;
+
+}
+
+
+/* Message wrapper */
+
+.message-wrapper {
+
+    position: relative;
+
+    max-width: 90%;
+
 }
 
 
@@ -728,7 +771,7 @@ body {
 
 .message {
 
-    max-width: 90%;
+    max-width: 100%;
 
     padding: 15px 18px;
 
@@ -743,7 +786,9 @@ body {
 }
 
 
-/* User */
+/* =====================================================
+   USER MESSAGE
+===================================================== */
 
 .user-message {
 
@@ -758,15 +803,21 @@ body {
 }
 
 
-/* AI */
+/* =====================================================
+   AI MESSAGE
+===================================================== */
 
 .bot-message {
 
-    background: #f3f4f6;
+    background: #f7f7f8;
 
-    color: #171717;
+    color: #172033;
 
     border-top-left-radius: 5px;
+
+    font-size: 16px;
+
+    line-height: 1.7;
 
 }
 
@@ -777,7 +828,14 @@ body {
 
 .bot-message p {
 
-    margin: 0 0 14px;
+    margin: 10px 0;
+
+}
+
+
+.bot-message p:first-child {
+
+    margin-top: 0;
 
 }
 
@@ -789,9 +847,23 @@ body {
 }
 
 
+/* Headings */
+
+.bot-message h1,
+.bot-message h2,
+.bot-message h3,
+.bot-message h4 {
+
+    color: #111827;
+
+    font-weight: 700;
+
+}
+
+
 .bot-message h1 {
 
-    font-size: 25px;
+    font-size: 26px;
 
     margin: 20px 0 12px;
 
@@ -800,7 +872,7 @@ body {
 
 .bot-message h2 {
 
-    font-size: 21px;
+    font-size: 22px;
 
     margin: 20px 0 10px;
 
@@ -809,7 +881,7 @@ body {
 
 .bot-message h3 {
 
-    font-size: 18px;
+    font-size: 19px;
 
     margin: 18px 0 8px;
 
@@ -825,6 +897,8 @@ body {
 }
 
 
+/* Bold */
+
 .bot-message strong {
 
     font-weight: 700;
@@ -834,6 +908,8 @@ body {
 }
 
 
+/* Italic */
+
 .bot-message em {
 
     font-style: italic;
@@ -841,30 +917,26 @@ body {
 }
 
 
-.bot-message ul {
+/* Lists */
 
-    margin: 10px 0 16px 20px;
-
-    padding-left: 18px;
-
-}
-
-
+.bot-message ul,
 .bot-message ol {
 
-    margin: 10px 0 16px 20px;
+    margin: 12px 0;
 
-    padding-left: 18px;
+    padding-left: 28px;
 
 }
 
 
 .bot-message li {
 
-    margin-bottom: 7px;
+    margin: 6px 0;
 
 }
 
+
+/* Links */
 
 .bot-message a {
 
@@ -874,6 +946,10 @@ body {
 
 }
 
+
+/* =====================================================
+   INLINE CODE
+===================================================== */
 
 .bot-message code {
 
@@ -887,16 +963,20 @@ body {
 
     font-family: Consolas, monospace;
 
-    font-size: 13px;
+    font-size: 14px;
 
 }
 
 
+/* =====================================================
+   CODE BLOCK
+===================================================== */
+
 .bot-message pre {
 
-    background: #1e1e1e;
+    background: #111827;
 
-    color: #f8fafc;
+    color: #f9fafb;
 
     padding: 16px;
 
@@ -913,14 +993,20 @@ body {
 
     background: transparent;
 
-    color: #f8fafc;
+    color: #f9fafb;
 
     padding: 0;
+
+    font-family: Consolas, monospace;
 
     line-height: 1.6;
 
 }
 
+
+/* =====================================================
+   BLOCKQUOTE
+===================================================== */
 
 .bot-message blockquote {
 
@@ -937,6 +1023,10 @@ body {
 }
 
 
+/* =====================================================
+   HORIZONTAL LINE
+===================================================== */
+
 .bot-message hr {
 
     border: none;
@@ -948,6 +1038,10 @@ body {
 }
 
 
+/* =====================================================
+   TABLE
+===================================================== */
+
 .bot-message table {
 
     width: 100%;
@@ -955,6 +1049,8 @@ body {
     border-collapse: collapse;
 
     margin: 18px 0;
+
+    overflow: hidden;
 
 }
 
@@ -968,6 +1064,8 @@ body {
     border: 1px solid #d1d5db;
 
     text-align: left;
+
+    font-weight: 700;
 
 }
 
@@ -985,13 +1083,6 @@ body {
    COPY BUTTON
 ===================================================== */
 
-.message-wrapper {
-
-    position: relative;
-
-}
-
-
 .copy-btn {
 
     border: none;
@@ -1003,6 +1094,8 @@ body {
     cursor: pointer;
 
     margin-top: 6px;
+
+    padding: 5px 8px;
 
     font-size: 12px;
 
@@ -1119,7 +1212,7 @@ body {
 
 
 /* =====================================================
-   LOADING
+   TYPING INDICATOR
 ===================================================== */
 
 .typing {
@@ -1164,7 +1257,9 @@ body {
 
 @keyframes typing {
 
-    0%, 60%, 100% {
+    0%,
+    60%,
+    100% {
 
         transform: translateY(0);
 
@@ -1245,7 +1340,9 @@ body {
 }
 
 
-/* Conversation list */
+/* =====================================================
+   CONVERSATION LIST
+===================================================== */
 
 .conversation-list {
 
@@ -1355,7 +1452,9 @@ body {
 }
 
 
-/* Empty */
+/* =====================================================
+   EMPTY STATE
+===================================================== */
 
 .empty-state {
 
@@ -1554,13 +1653,9 @@ body.dark {
 
 
 body.dark .feature-card,
-
 body.dark .chat-container,
-
 body.dark .section-header,
-
 body.dark .conversation-card,
-
 body.dark .settings-card {
 
     background: #1f2937;
@@ -1577,7 +1672,11 @@ body.dark .bot-message {
 }
 
 
-body.dark .bot-message strong {
+body.dark .bot-message strong,
+body.dark .bot-message h1,
+body.dark .bot-message h2,
+body.dark .bot-message h3,
+body.dark .bot-message h4 {
 
     color: white;
 
@@ -1614,6 +1713,15 @@ body.dark .bot-message th {
 body.dark .bot-message td {
 
     border-color: #4b5563;
+
+}
+
+
+body.dark .bot-message blockquote {
+
+    background: #1f2937;
+
+    color: #d1d5db;
 
 }
 
@@ -1745,6 +1853,13 @@ body.dark .bot-message td {
     .message {
 
         max-width: 92%;
+
+        font-size: 14px;
+
+    }
+
+
+    .bot-message {
 
         font-size: 14px;
 

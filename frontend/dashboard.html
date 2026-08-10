@@ -12,28 +12,18 @@
     <title>Dashboard | Secure AI Assistant</title>
 
 
-    <!-- Font Awesome -->
+    <!-- =================================================
+         FONT AWESOME
+    ================================================== -->
 
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 
-    <!-- Markdown Renderer -->
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
-    </script>
-
-
-    <!-- HTML Sanitizer -->
-
-    <script
-        src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js">
-    </script>
-
-
-    <!-- Dashboard CSS -->
+    <!-- =================================================
+         DASHBOARD CSS
+    ================================================== -->
 
     <link
         rel="stylesheet"
@@ -46,7 +36,7 @@
 
 
 <!-- =====================================================
-     MOBILE OVERLAY
+     MOBILE SIDEBAR OVERLAY
 ===================================================== -->
 
 <div
@@ -64,7 +54,7 @@
     class="sidebar">
 
 
-    <!-- Logo -->
+    <!-- LOGO -->
 
     <div class="logo">
 
@@ -74,19 +64,25 @@
 
         <div>
 
-            <h2>Secure AI</h2>
+            <h2>
+                Secure AI
+            </h2>
 
-            <span>Assistant</span>
+            <span>
+                Assistant
+            </span>
 
         </div>
 
     </div>
 
 
-    <!-- Navigation -->
+    <!-- NAVIGATION -->
 
     <nav class="sidebar-nav">
 
+
+        <!-- CHAT -->
 
         <button
             class="nav-item active"
@@ -94,10 +90,14 @@
 
             <i class="fa-solid fa-comments"></i>
 
-            <span>Chat</span>
+            <span>
+                Chat
+            </span>
 
         </button>
 
+
+        <!-- NEW CHAT -->
 
         <button
             class="nav-item"
@@ -105,10 +105,14 @@
 
             <i class="fa-solid fa-plus"></i>
 
-            <span>New Chat</span>
+            <span>
+                New Chat
+            </span>
 
         </button>
 
+
+        <!-- HISTORY -->
 
         <button
             class="nav-item"
@@ -116,10 +120,14 @@
 
             <i class="fa-solid fa-clock-rotate-left"></i>
 
-            <span>Chat History</span>
+            <span>
+                Chat History
+            </span>
 
         </button>
 
+
+        <!-- SAVED -->
 
         <button
             class="nav-item"
@@ -127,10 +135,14 @@
 
             <i class="fa-solid fa-bookmark"></i>
 
-            <span>Saved Chats</span>
+            <span>
+                Saved Chats
+            </span>
 
         </button>
 
+
+        <!-- FAVORITES -->
 
         <button
             class="nav-item"
@@ -138,10 +150,14 @@
 
             <i class="fa-solid fa-star"></i>
 
-            <span>Favorites</span>
+            <span>
+                Favorites
+            </span>
 
         </button>
 
+
+        <!-- SETTINGS -->
 
         <button
             class="nav-item"
@@ -149,14 +165,16 @@
 
             <i class="fa-solid fa-gear"></i>
 
-            <span>Settings</span>
+            <span>
+                Settings
+            </span>
 
         </button>
 
     </nav>
 
 
-    <!-- User -->
+    <!-- USER SECTION -->
 
     <div class="sidebar-bottom">
 
@@ -185,6 +203,8 @@
         </div>
 
 
+        <!-- LOGOUT -->
+
         <button
             id="logoutBtn"
             class="logout-btn">
@@ -207,10 +227,14 @@
 <main class="main-content">
 
 
-    <!-- Top Bar -->
+    <!-- =================================================
+         TOP BAR
+    ================================================== -->
 
     <header class="topbar">
 
+
+        <!-- MOBILE MENU -->
 
         <button
             id="menuBtn"
@@ -220,6 +244,8 @@
 
         </button>
 
+
+        <!-- PAGE TITLE -->
 
         <div>
 
@@ -234,11 +260,14 @@
         </div>
 
 
+        <!-- USER -->
+
         <div class="topbar-user">
 
             <span id="topUsername">
                 User
             </span>
+
 
             <div class="top-avatar">
 
@@ -252,7 +281,7 @@
 
 
     <!-- =================================================
-         DASHBOARD HOME
+         CHAT VIEW
     ================================================== -->
 
     <section
@@ -260,16 +289,22 @@
         class="view active-view">
 
 
-        <!-- Welcome -->
+        <!-- WELCOME -->
 
         <div class="welcome-section">
 
             <h2>
+
                 Welcome back,
+
                 <span id="welcomeUsername">
                     User
-                </span> 👋
+                </span>
+
+                👋
+
             </h2>
+
 
             <p>
                 How can I help you today?
@@ -278,10 +313,12 @@
         </div>
 
 
-        <!-- Feature Cards -->
+        <!-- FEATURE CARDS -->
 
         <div class="feature-grid">
 
+
+            <!-- AI CHAT -->
 
             <div
                 class="feature-card"
@@ -293,9 +330,11 @@
 
                 </div>
 
+
                 <h3>
                     AI Chat
                 </h3>
+
 
                 <p>
                     Ask questions and get intelligent
@@ -304,6 +343,8 @@
 
             </div>
 
+
+            <!-- HISTORY -->
 
             <div
                 class="feature-card"
@@ -315,9 +356,11 @@
 
                 </div>
 
+
                 <h3>
                     Chat History
                 </h3>
+
 
                 <p>
                     View and manage your previous
@@ -326,6 +369,8 @@
 
             </div>
 
+
+            <!-- SECURITY -->
 
             <div
                 class="feature-card"
@@ -337,9 +382,11 @@
 
                 </div>
 
+
                 <h3>
                     Secure
                 </h3>
+
 
                 <p>
                     Your account and conversations
@@ -358,12 +405,13 @@
         <div class="chat-container">
 
 
-            <!-- Chat Header -->
+            <!-- CHAT HEADER -->
 
             <div class="chat-header">
 
 
                 <div class="assistant-info">
+
 
                     <div class="assistant-avatar">
 
@@ -378,6 +426,7 @@
                             AI Assistant
                         </h2>
 
+
                         <span class="status">
 
                             <span class="status-dot"></span>
@@ -390,6 +439,8 @@
 
                 </div>
 
+
+                <!-- SAVE CHAT -->
 
                 <button
                     id="saveChatBtn"
@@ -404,18 +455,22 @@
             </div>
 
 
-            <!-- Messages -->
+            <!-- =================================================
+                 CHAT MESSAGES
+            ================================================== -->
 
             <div
                 id="chatMessages"
                 class="chat-messages">
 
-                <!-- Messages inserted by JavaScript -->
+                <!-- JavaScript inserts messages here -->
 
             </div>
 
 
-            <!-- Input -->
+            <!-- =================================================
+                 INPUT
+            ================================================== -->
 
             <div class="chat-input-area">
 
@@ -450,7 +505,7 @@
 
 
     <!-- =================================================
-         HISTORY VIEW
+         CHAT HISTORY
     ================================================== -->
 
     <section
@@ -460,12 +515,17 @@
 
         <div class="section-header">
 
+
             <div>
 
                 <h2>
+
                     <i class="fa-solid fa-clock-rotate-left"></i>
+
                     Chat History
+
                 </h2>
+
 
                 <p>
                     Your previous conversations
@@ -497,7 +557,7 @@
 
 
     <!-- =================================================
-         SAVED CHATS VIEW
+         SAVED CHATS
     ================================================== -->
 
     <section
@@ -506,6 +566,7 @@
 
 
         <div class="section-header">
+
 
             <div>
 
@@ -516,6 +577,7 @@
                     Saved Chats
 
                 </h2>
+
 
                 <p>
                     Conversations you saved
@@ -536,7 +598,7 @@
 
 
     <!-- =================================================
-         FAVORITES VIEW
+         FAVORITES
     ================================================== -->
 
     <section
@@ -545,6 +607,7 @@
 
 
         <div class="section-header">
+
 
             <div>
 
@@ -555,6 +618,7 @@
                     Favorites
 
                 </h2>
+
 
                 <p>
                     Your favorite conversations
@@ -575,7 +639,7 @@
 
 
     <!-- =================================================
-         SETTINGS VIEW
+         SETTINGS
     ================================================== -->
 
     <section
@@ -584,6 +648,7 @@
 
 
         <div class="section-header">
+
 
             <div>
 
@@ -594,6 +659,7 @@
                     Settings
 
                 </h2>
+
 
                 <p>
                     Manage your account preferences
@@ -607,6 +673,8 @@
         <div class="settings-card">
 
 
+            <!-- ACCOUNT -->
+
             <div class="setting-row">
 
                 <div>
@@ -615,17 +683,23 @@
                         Account
                     </h3>
 
+
                     <p>
+
                         Logged in as
+
                         <strong id="settingsEmail">
                             -
                         </strong>
+
                     </p>
 
                 </div>
 
             </div>
 
+
+            <!-- THEME -->
 
             <div class="setting-row">
 
@@ -634,6 +708,7 @@
                     <h3>
                         Theme
                     </h3>
+
 
                     <p>
                         Choose your dashboard appearance.
@@ -657,6 +732,8 @@
             </div>
 
 
+            <!-- ENTER TO SEND -->
+
             <div class="setting-row">
 
                 <div>
@@ -664,6 +741,7 @@
                     <h3>
                         Enter to Send
                     </h3>
+
 
                     <p>
                         Press Enter to send messages.
@@ -686,6 +764,8 @@
             </div>
 
 
+            <!-- DELETE LOCAL DATA -->
+
             <div class="setting-row">
 
                 <div>
@@ -693,6 +773,7 @@
                     <h3>
                         Delete Local Data
                     </h3>
+
 
                     <p>
                         Remove saved chats and local history.
@@ -711,7 +792,6 @@
 
             </div>
 
-
         </div>
 
     </section>
@@ -720,10 +800,31 @@
 
 
 <!-- =====================================================
-     JAVASCRIPT
+     EXTERNAL JAVASCRIPT LIBRARIES
 ===================================================== -->
 
-<script src="js/dashboard.js"></script>
+
+<!-- Markdown Parser -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/marked/marked.min.js">
+</script>
+
+
+<!-- HTML Sanitizer -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js">
+</script>
+
+
+<!-- =====================================================
+     YOUR DASHBOARD JAVASCRIPT
+===================================================== -->
+
+<script
+    src="js/dashboard.js">
+</script>
 
 
 </body>
