@@ -1,112 +1,337 @@
-/* Password Strength */
+/* =========================
+   GLOBAL
+========================= */
 
-.password-strength{
-
-    margin-top:-8px;
-    margin-bottom:15px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
-#strengthBar{
-
-    width:100%;
-    height:7px;
-
-    background:#dcdcdc;
-
-    border-radius:10px;
-
-    overflow:hidden;
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    overflow: hidden;
 }
 
-#strength{
+/* Background circles */
 
-    width:0%;
-
-    height:100%;
-
-    background:red;
-
-    transition:.3s;
+body::before,
+body::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
 }
 
-#strengthText{
-
-    display:block;
-
-    margin-top:6px;
-
-    color:white;
-
-    font-size:13px;
+body::before {
+    width: 350px;
+    height: 350px;
+    top: -80px;
+    left: -80px;
 }
 
-/* Loading */
-
-#loading{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:10px;
-
-    color:white;
-
-    margin-top:15px;
+body::after {
+    width: 280px;
+    height: 280px;
+    bottom: -80px;
+    right: -80px;
 }
 
-/* Spinner */
+/* =========================
+   CONTAINER
+========================= */
 
-.spinner{
-
-    width:18px;
-    height:18px;
-
-    border:3px solid rgba(255,255,255,.3);
-
-    border-top:3px solid white;
-
-    border-radius:50%;
-
-    animation:spin .8s linear infinite;
+.container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
 }
 
-@keyframes spin{
+/* =========================
+   CARD
+========================= */
 
-    to{
+.signup-card {
 
-        transform:rotate(360deg);
+    width: 460px;
+
+    padding: 40px;
+
+    background: rgba(255,255,255,.15);
+
+    backdrop-filter: blur(15px);
+
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+
+    color: white;
+
+}
+
+.signup-card h1 {
+
+    text-align: center;
+
+    font-size: 42px;
+
+    margin-bottom: 10px;
+
+}
+
+.signup-card p {
+
+    text-align: center;
+
+    margin-bottom: 25px;
+
+    font-size: 17px;
+
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.input-group {
+
+    position: relative;
+
+    margin-bottom: 18px;
+
+}
+
+.input-group i:first-child {
+
+    position: absolute;
+
+    left: 16px;
+
+    top: 17px;
+
+    color: #666;
+
+}
+
+.input-group input {
+
+    width: 100%;
+
+    padding: 15px 48px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    background: white;
+
+}
+
+/* =========================
+   PASSWORD TOGGLE
+========================= */
+
+.toggle-password {
+
+    position: absolute;
+
+    right: 16px;
+
+    top: 17px;
+
+    cursor: pointer;
+
+    color: #666;
+
+}
+
+/* =========================
+   PASSWORD STRENGTH
+========================= */
+
+.password-strength {
+
+    margin-top: -5px;
+
+    margin-bottom: 18px;
+
+}
+
+#strengthBar {
+
+    width: 100%;
+
+    height: 8px;
+
+    background: rgba(255,255,255,.3);
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+}
+
+#strength {
+
+    width: 0%;
+
+    height: 100%;
+
+    background: red;
+
+    transition: .4s;
+
+}
+
+#strengthText {
+
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 13px;
+
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #4f46e5;
+
+    color: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+button:hover {
+
+    background: #3730a3;
+
+}
+
+/* =========================
+   LOADING
+========================= */
+
+#loading {
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 20px;
+
+}
+
+.spinner {
+
+    width: 18px;
+
+    height: 18px;
+
+    border: 3px solid rgba(255,255,255,.4);
+
+    border-top: 3px solid white;
+
+    border-radius: 50%;
+
+    animation: spin .8s linear infinite;
+
+}
+
+@keyframes spin {
+
+    to {
+
+        transform: rotate(360deg);
 
     }
 
 }
 
-/* Message */
+/* =========================
+   MESSAGE
+========================= */
 
-#message{
+#message {
 
-    margin-top:15px;
+    margin-top: 18px;
 
-    text-align:center;
+    text-align: center;
 
-    font-weight:600;
+    font-weight: bold;
 
-    color:white;
 }
 
-/* Toggle Password */
+/* =========================
+   LOGIN LINK
+========================= */
 
-.toggle-password{
+.signup-card a {
 
-    position:absolute;
+    color: white;
 
-    top:15px;
+    font-weight: bold;
 
-    right:18px;
+    text-decoration: none;
 
-    cursor:pointer;
+}
 
-    color:#777;
+.signup-card a:hover {
+
+    text-decoration: underline;
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .signup-card {
+
+        width: 92%;
+
+        padding: 30px;
+
+    }
+
+    .signup-card h1 {
+
+        font-size: 34px;
+
+    }
+
 }
