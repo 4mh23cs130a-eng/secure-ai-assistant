@@ -2,267 +2,437 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard | Secure AI Assistant</title>
 
-    <!-- Dashboard CSS -->
-    <link rel="stylesheet" href="css/dashboard.css">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- Dashboard CSS -->
+
+    <link
+        rel="stylesheet"
+        href="css/dashboard.css">
+
 </head>
+
 
 <body>
 
-<div class="dashboard">
 
-    <!-- =========================================
-         SIDEBAR
-    ========================================== -->
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
-    <aside class="sidebar">
+<aside class="sidebar" id="sidebar">
 
-        <div class="logo">
-            🤖 <span>Secure AI</span>
+
+    <!-- Logo -->
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            🤖
         </div>
 
+        <div class="logo-text">
+            <strong>Secure AI</strong>
+            <span>Assistant</span>
+        </div>
 
-        <nav class="sidebar-nav">
-
-            <a href="dashboard.html" class="active">
-                <i class="fa-solid fa-comments"></i>
-                <span>Chat</span>
-            </a>
-
-            <a href="dashboard.html">
-                <i class="fa-solid fa-plus"></i>
-                <span>New Chat</span>
-            </a>
-
-            <a href="#">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                <span>Chat History</span>
-            </a>
-
-            <a href="#">
-                <i class="fa-solid fa-bookmark"></i>
-                <span>Saved Chats</span>
-            </a>
-
-            <a href="#">
-                <i class="fa-solid fa-star"></i>
-                <span>Favorites</span>
-            </a>
-
-            <a href="settings.html">
-                <i class="fa-solid fa-gear"></i>
-                <span>Settings</span>
-            </a>
-
-        </nav>
+    </div>
 
 
-        <!-- Logout -->
+    <!-- Navigation -->
 
-        <button class="logout-btn" onclick="logout()">
+    <nav class="sidebar-nav">
 
-            <i class="fa-solid fa-right-from-bracket"></i>
 
-            Logout
+        <button
+            class="nav-item active"
+            id="chatBtn"
+            type="button">
+
+            <i class="fa-solid fa-comments"></i>
+
+            <span>Chat</span>
 
         </button>
 
-    </aside>
+
+        <button
+            class="nav-item"
+            id="newChatBtn"
+            type="button">
+
+            <i class="fa-solid fa-plus"></i>
+
+            <span>New Chat</span>
+
+        </button>
 
 
-    <!-- =========================================
-         MAIN CONTENT
-    ========================================== -->
+        <button
+            class="nav-item"
+            id="historyBtn"
+            type="button">
 
-    <main class="main-content">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+
+            <span>Chat History</span>
+
+        </button>
 
 
-        <!-- TOP BAR -->
+        <button
+            class="nav-item"
+            id="savedChatsBtn"
+            type="button">
 
-        <div class="topbar">
+            <i class="fa-solid fa-bookmark"></i>
 
-            <div>
-                <h1>Secure AI Assistant</h1>
+            <span>Saved Chats</span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="favoritesBtn"
+            type="button">
+
+            <i class="fa-solid fa-star"></i>
+
+            <span>Favorites</span>
+
+        </button>
+
+
+        <button
+            class="nav-item"
+            id="settingsBtn"
+            type="button">
+
+            <i class="fa-solid fa-gear"></i>
+
+            <span>Settings</span>
+
+        </button>
+
+    </nav>
+
+
+    <!-- Sidebar Bottom -->
+
+    <div class="sidebar-bottom">
+
+        <div class="user-mini">
+
+            <div class="user-avatar">
+                <i class="fa-solid fa-user"></i>
             </div>
 
+            <div class="user-mini-info">
 
-            <div class="user-info">
+                <strong id="sidebarUsername">
+                    User
+                </strong>
 
-                <div class="user-avatar">
-
-                    <i class="fa-solid fa-user"></i>
-
-                </div>
-
-                <div>
-
-                    <strong id="username">
-                        User
-                    </strong>
-
-                    <small>
-                        <br>
-                        <span style="color: #16a34a;">
-                            ● Online
-                        </span>
-                    </small>
-
-                </div>
+                <span>Online</span>
 
             </div>
 
         </div>
 
 
-        <!-- =========================================
-             WELCOME CARD
-        ========================================== -->
+        <button
+            class="logout-btn"
+            id="logoutBtn"
+            type="button">
 
-        <section class="welcome-card">
+            <i class="fa-solid fa-right-from-bracket"></i>
 
-            <h2>
-                👋 Welcome to Secure AI Assistant
-            </h2>
+            <span>Logout</span>
 
-            <p>
-                Your intelligent and secure AI companion.
-                Ask questions, get help and manage your conversations.
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN AREA
+===================================================== -->
+
+<main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            type="button">
+
+            <i class="fa-solid fa-bars"></i>
+
+        </button>
+
+
+        <div>
+
+            <h1 id="pageTitle">
+                Secure AI Assistant
+            </h1>
+
+            <p id="pageSubtitle">
+                Your intelligent AI companion
             </p>
 
-        </section>
+        </div>
 
 
-        <!-- =========================================
-             DASHBOARD CARDS
-        ========================================== -->
+        <div class="top-user">
 
-        <section class="cards">
+            <div class="top-avatar">
+
+                <i class="fa-solid fa-user"></i>
+
+            </div>
+
+            <span id="topUsername">
+                User
+            </span>
+
+        </div>
+
+    </header>
 
 
-            <div class="card">
 
-                <div class="card-icon">
+    <!-- =================================================
+         DASHBOARD CONTENT
+    ================================================= -->
+
+    <section class="content">
+
+
+        <!-- Welcome -->
+
+        <div
+            class="welcome-section"
+            id="welcomeSection">
+
+            <div>
+
+                <h2>
+                    Welcome back,
+                    <span id="welcomeUsername">
+                        User
+                    </span> 👋
+                </h2>
+
+                <p>
+                    Ask me anything and I'll do my best to help you.
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FEATURE CARDS -->
+
+        <div
+            class="feature-grid"
+            id="featureGrid">
+
+
+            <div
+                class="feature-card"
+                id="featureChat">
+
+                <div class="feature-icon">
 
                     <i class="fa-solid fa-comments"></i>
 
                 </div>
 
-                <h3>AI Chat</h3>
+                <h3>
+                    AI Chat
+                </h3>
 
                 <p>
-                    Ask questions and get intelligent responses
-                    from your AI assistant.
+                    Ask questions and get intelligent
+                    responses from your AI assistant.
                 </p>
 
             </div>
 
 
-            <div class="card">
+            <div
+                class="feature-card"
+                id="featureHistory">
 
-                <div class="card-icon">
+                <div class="feature-icon">
 
                     <i class="fa-solid fa-clock-rotate-left"></i>
 
                 </div>
 
-                <h3>Chat History</h3>
+                <h3>
+                    Chat History
+                </h3>
 
                 <p>
-                    View and manage your previous conversations.
+                    View and manage your previous
+                    conversations.
                 </p>
 
             </div>
 
 
-            <div class="card">
+            <div class="feature-card">
 
-                <div class="card-icon">
+                <div class="feature-icon">
 
                     <i class="fa-solid fa-shield-halved"></i>
 
                 </div>
 
-                <h3>Secure</h3>
+                <h3>
+                    Secure
+                </h3>
 
                 <p>
-                    Your account and conversations are protected.
+                    Your account and conversations
+                    are protected.
                 </p>
 
             </div>
 
-        </section>
+        </div>
 
 
-        <!-- =========================================
-             CHAT
-        ========================================== -->
 
-        <section class="chat-container">
+        <!-- =================================================
+             CHAT SECTION
+        ================================================= -->
+
+        <section
+            class="chat-container"
+            id="chatContainer">
 
 
             <!-- Chat Header -->
 
             <div class="chat-header">
 
-                <i class="fa-solid fa-robot"></i>
 
-                <div>
+                <div class="assistant-info">
 
-                    <h3>
-                        AI Assistant
-                    </h3>
+                    <div class="assistant-icon">
 
-                    <small>
-                        Ready to help
-                    </small>
+                        <i class="fa-solid fa-robot"></i>
 
-                </div>
-
-            </div>
+                    </div>
 
 
-            <!-- Chat Messages -->
+                    <div>
 
-            <div class="chat-messages" id="chatMessages">
+                        <h2>
+                            AI Assistant
+                        </h2>
 
+                        <span>
+                            <i class="fa-solid fa-circle"></i>
+                            Ready to help
+                        </span>
 
-                <!-- AI Message -->
-
-                <div class="message bot">
-
-                    👋 Hello!
-
-                    Welcome to Secure AI Assistant.
-
-                    How can I help you today?
+                    </div>
 
                 </div>
 
 
+                <button
+                    class="save-chat-btn"
+                    id="saveChatBtn"
+                    type="button">
+
+                    <i class="fa-solid fa-bookmark"></i>
+
+                    Save Chat
+
+                </button>
+
             </div>
 
 
-            <!-- Chat Input -->
 
-            <form class="chat-input" id="chatForm">
+            <!-- Messages -->
+
+            <div
+                class="chat-messages"
+                id="chatMessages">
+
+
+                <div class="message-row bot-row">
+
+                    <div class="message-avatar">
+
+                        <i class="fa-solid fa-robot"></i>
+
+                    </div>
+
+                    <div class="message bot-message">
+
+                        👋 Hello!
+                        Welcome to Secure AI Assistant.
+                        How can I help you today?
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- Input -->
+
+            <form
+                class="chat-input-area"
+                id="chatForm">
+
 
                 <input
                     type="text"
                     id="chatInput"
                     placeholder="Ask anything..."
-                    autocomplete="off"
-                    required
-                >
+                    autocomplete="off">
 
-                <button type="submit">
+
+                <button
+                    type="submit"
+                    id="sendBtn"
+                    title="Send">
 
                     <i class="fa-solid fa-paper-plane"></i>
 
@@ -271,145 +441,147 @@
             </form>
 
 
+            <div class="chat-status" id="chatStatus"></div>
+
+
         </section>
 
-    </main>
-
-</div>
 
 
-<!-- =========================================
-     JAVASCRIPT
-     
-     No dashboard.js required.
-========================================== -->
+        <!-- =================================================
+             HISTORY SECTION
+        ================================================= -->
 
-<script>
+        <section
+            class="panel hidden"
+            id="historyPanel">
 
-    // -----------------------------------------
-    // Display logged-in username
-    // -----------------------------------------
+            <div class="panel-header">
 
-    const savedUsername =
-        localStorage.getItem("username");
+                <div>
 
-    const usernameElement =
-        document.getElementById("username");
+                    <h2>
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Chat History
+                    </h2>
 
-    if (savedUsername) {
+                    <p>
+                        Your previous conversations
+                    </p>
 
-        usernameElement.textContent =
-            savedUsername;
-
-    }
+                </div>
 
 
-    // -----------------------------------------
-    // Logout
-    // -----------------------------------------
+                <button
+                    class="clear-btn"
+                    id="clearHistoryBtn"
+                    type="button">
 
-    function logout() {
+                    <i class="fa-solid fa-trash"></i>
 
-        localStorage.removeItem("token");
+                    Clear
 
-        localStorage.removeItem("username");
+                </button>
 
-        localStorage.removeItem("email");
-
-        localStorage.removeItem("loggedIn");
-
-        window.location.href = "login.html";
-
-    }
+            </div>
 
 
-    // -----------------------------------------
-    // Chat UI
-    // -----------------------------------------
+            <div
+                class="history-list"
+                id="historyList">
 
-    const chatForm =
-        document.getElementById("chatForm");
+            </div>
 
-    const chatInput =
-        document.getElementById("chatInput");
-
-    const chatMessages =
-        document.getElementById("chatMessages");
+        </section>
 
 
-    chatForm.addEventListener(
-        "submit",
-        function(event) {
 
-            event.preventDefault();
+        <!-- =================================================
+             SAVED CHATS
+        ================================================= -->
 
+        <section
+            class="panel hidden"
+            id="savedPanel">
 
-            const message =
-                chatInput.value.trim();
+            <div class="panel-header">
 
+                <div>
 
-            if (!message) {
-                return;
-            }
+                    <h2>
 
+                        <i class="fa-solid fa-bookmark"></i>
 
-            // User message
+                        Saved Chats
 
-            const userMessage =
-                document.createElement("div");
+                    </h2>
 
-            userMessage.className =
-                "message user";
+                    <p>
+                        Your saved conversations
+                    </p>
 
-            userMessage.textContent =
-                message;
+                </div>
 
-
-            chatMessages.appendChild(
-                userMessage
-            );
+            </div>
 
 
-            // Clear input
+            <div
+                class="saved-list"
+                id="savedList">
 
-            chatInput.value = "";
+            </div>
 
-
-            // Temporary AI response
-
-            setTimeout(function() {
-
-                const botMessage =
-                    document.createElement("div");
-
-                botMessage.className =
-                    "message bot";
-
-                botMessage.textContent =
-                    "I received your message. AI backend integration will be connected next.";
-
-                chatMessages.appendChild(
-                    botMessage
-                );
+        </section>
 
 
-                // Scroll to bottom
 
-                chatMessages.scrollTop =
-                    chatMessages.scrollHeight;
+        <!-- =================================================
+             FAVORITES
+        ================================================= -->
 
-            }, 500);
+        <section
+            class="panel hidden"
+            id="favoritesPanel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <h2>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        Favorites
+
+                    </h2>
+
+                    <p>
+                        Your favorite messages
+                    </p>
+
+                </div>
+
+            </div>
 
 
-            // Scroll to bottom
+            <div
+                class="favorites-list"
+                id="favoritesList">
 
-            chatMessages.scrollTop =
-                chatMessages.scrollHeight;
+            </div>
 
-        }
-    );
+        </section>
 
-</script>
+
+    </section>
+
+</main>
+
+
+
+<!-- Dashboard JavaScript -->
+
+<script src="js/dashboard.js"></script>
 
 
 </body>
