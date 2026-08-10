@@ -2,82 +2,101 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Dashboard | Secure AI Assistant</title>
 
+    <!-- Dashboard CSS -->
     <link rel="stylesheet" href="css/dashboard.css">
 
+    <!-- Font Awesome -->
     <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 </head>
 
 <body>
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
 
     <aside class="sidebar">
 
         <div class="logo">
-
-            🤖 Secure AI
-
+            🤖 <span>Secure AI</span>
         </div>
 
-        <ul>
 
-            <li class="active">
+        <nav class="sidebar-nav">
+
+            <a href="dashboard.html" class="active">
                 <i class="fa-solid fa-comments"></i>
-                Chat
-            </li>
+                <span>Chat</span>
+            </a>
 
-            <li>
+            <a href="dashboard.html">
                 <i class="fa-solid fa-plus"></i>
-                New Chat
-            </li>
+                <span>New Chat</span>
+            </a>
 
-            <li>
+            <a href="#">
                 <i class="fa-solid fa-clock-rotate-left"></i>
-                Chat History
-            </li>
+                <span>Chat History</span>
+            </a>
 
-            <li>
+            <a href="#">
                 <i class="fa-solid fa-bookmark"></i>
-                Saved Chats
-            </li>
+                <span>Saved Chats</span>
+            </a>
 
-            <li>
+            <a href="#">
                 <i class="fa-solid fa-star"></i>
-                Favorites
-            </li>
+                <span>Favorites</span>
+            </a>
 
-            <li onclick="window.location='settings.html'">
+            <a href="settings.html">
                 <i class="fa-solid fa-gear"></i>
-                Settings
-            </li>
+                <span>Settings</span>
+            </a>
 
-        </ul>
+        </nav>
+
+
+        <!-- Logout -->
+
+        <button class="logout-btn" onclick="logout()">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+        </button>
 
     </aside>
 
-    <!-- Main -->
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
 
     <main class="main-content">
 
-        <!-- Header -->
 
-        <header class="topbar">
+        <!-- TOP BAR -->
 
-            <h2>Secure AI Assistant</h2>
+        <div class="topbar">
 
-            <div class="profile">
+            <div>
+                <h1>Secure AI Assistant</h1>
+            </div>
 
-                <div class="avatar">
+
+            <div class="user-info">
+
+                <div class="user-avatar">
 
                     <i class="fa-solid fa-user"></i>
 
@@ -85,63 +104,314 @@
 
                 <div>
 
-                    <h4 id="username">User</h4>
+                    <strong id="username">
+                        User
+                    </strong>
 
-                    <small>Online</small>
+                    <small>
+                        <br>
+                        <span style="color: #16a34a;">
+                            ● Online
+                        </span>
+                    </small>
 
                 </div>
 
-                <button id="logoutBtn">
+            </div>
 
-                    Logout
+        </div>
 
-                </button>
+
+        <!-- =========================================
+             WELCOME CARD
+        ========================================== -->
+
+        <section class="welcome-card">
+
+            <h2>
+                👋 Welcome to Secure AI Assistant
+            </h2>
+
+            <p>
+                Your intelligent and secure AI companion.
+                Ask questions, get help and manage your conversations.
+            </p>
+
+        </section>
+
+
+        <!-- =========================================
+             DASHBOARD CARDS
+        ========================================== -->
+
+        <section class="cards">
+
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                </div>
+
+                <h3>AI Chat</h3>
+
+                <p>
+                    Ask questions and get intelligent responses
+                    from your AI assistant.
+                </p>
 
             </div>
 
-        </header>
 
-        <!-- Chat -->
+            <div class="card">
 
-        <section class="chat-box" id="chatBox">
+                <div class="card-icon">
 
-            <div class="ai-message">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
 
-                👋 Hello!
+                </div>
 
-                Welcome to Secure AI Assistant.
+                <h3>Chat History</h3>
 
-                How can I help you today?
+                <p>
+                    View and manage your previous conversations.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-icon">
+
+                    <i class="fa-solid fa-shield-halved"></i>
+
+                </div>
+
+                <h3>Secure</h3>
+
+                <p>
+                    Your account and conversations are protected.
+                </p>
 
             </div>
 
         </section>
 
-        <!-- Input -->
 
-        <footer class="chat-input">
+        <!-- =========================================
+             CHAT
+        ========================================== -->
 
-            <input
+        <section class="chat-container">
 
-                type="text"
 
-                id="userInput"
+            <!-- Chat Header -->
 
-                placeholder="Ask anything...">
+            <div class="chat-header">
 
-            <button id="sendBtn">
+                <i class="fa-solid fa-robot"></i>
 
-                <i class="fa-solid fa-paper-plane"></i>
+                <div>
 
-            </button>
+                    <h3>
+                        AI Assistant
+                    </h3>
 
-        </footer>
+                    <small>
+                        Ready to help
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <!-- Chat Messages -->
+
+            <div class="chat-messages" id="chatMessages">
+
+
+                <!-- AI Message -->
+
+                <div class="message bot">
+
+                    👋 Hello!
+
+                    Welcome to Secure AI Assistant.
+
+                    How can I help you today?
+
+                </div>
+
+
+            </div>
+
+
+            <!-- Chat Input -->
+
+            <form class="chat-input" id="chatForm">
+
+                <input
+                    type="text"
+                    id="chatInput"
+                    placeholder="Ask anything..."
+                    autocomplete="off"
+                    required
+                >
+
+                <button type="submit">
+
+                    <i class="fa-solid fa-paper-plane"></i>
+
+                </button>
+
+            </form>
+
+
+        </section>
 
     </main>
 
 </div>
 
-<script src="js/dashboard.js"></script>
+
+<!-- =========================================
+     JAVASCRIPT
+     
+     No dashboard.js required.
+========================================== -->
+
+<script>
+
+    // -----------------------------------------
+    // Display logged-in username
+    // -----------------------------------------
+
+    const savedUsername =
+        localStorage.getItem("username");
+
+    const usernameElement =
+        document.getElementById("username");
+
+    if (savedUsername) {
+
+        usernameElement.textContent =
+            savedUsername;
+
+    }
+
+
+    // -----------------------------------------
+    // Logout
+    // -----------------------------------------
+
+    function logout() {
+
+        localStorage.removeItem("token");
+
+        localStorage.removeItem("username");
+
+        localStorage.removeItem("email");
+
+        localStorage.removeItem("loggedIn");
+
+        window.location.href = "login.html";
+
+    }
+
+
+    // -----------------------------------------
+    // Chat UI
+    // -----------------------------------------
+
+    const chatForm =
+        document.getElementById("chatForm");
+
+    const chatInput =
+        document.getElementById("chatInput");
+
+    const chatMessages =
+        document.getElementById("chatMessages");
+
+
+    chatForm.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const message =
+                chatInput.value.trim();
+
+
+            if (!message) {
+                return;
+            }
+
+
+            // User message
+
+            const userMessage =
+                document.createElement("div");
+
+            userMessage.className =
+                "message user";
+
+            userMessage.textContent =
+                message;
+
+
+            chatMessages.appendChild(
+                userMessage
+            );
+
+
+            // Clear input
+
+            chatInput.value = "";
+
+
+            // Temporary AI response
+
+            setTimeout(function() {
+
+                const botMessage =
+                    document.createElement("div");
+
+                botMessage.className =
+                    "message bot";
+
+                botMessage.textContent =
+                    "I received your message. AI backend integration will be connected next.";
+
+                chatMessages.appendChild(
+                    botMessage
+                );
+
+
+                // Scroll to bottom
+
+                chatMessages.scrollTop =
+                    chatMessages.scrollHeight;
+
+            }, 500);
+
+
+            // Scroll to bottom
+
+            chatMessages.scrollTop =
+                chatMessages.scrollHeight;
+
+        }
+    );
+
+</script>
+
 
 </body>
+
 </html>
