@@ -5,6 +5,10 @@ from security.input_filter import check_input
 from security.guardrails import check_guardrails
 from security.logger import log_request
 
+from database.db import db
+from database.models import Conversation
+
+
 chat_bp = Blueprint("chat", __name__)
 
 
@@ -13,21 +17,34 @@ def chat():
 
     try:
 
+        # ==========================================
+        # GET USER MESSAGE
+        # ==========================================
+
         data = request.get_json()
 
         if not data or "message" not in data:
+
             return jsonify({
                 "success": False,
-                "error": "Message is required."
+                "error": "Please enter a message."
             }), 400
 
-        user_message = data["message"]
+        user_message = data["message"].strip()
+
+        if not user_message:
+
+            return jsonify({
+                "success": False,
+                "error": "Please enter a message."
+            }), 400
 
         client_ip = request.remote_addr
 
-        # -------------------------
-        # Input Filter
-        # -------------------------
+
+        # ==========================================
+        # INPUT FILTER
+        # ==========================================
 
         if not check_input(user_message):
 
@@ -39,12 +56,13 @@ def chat():
 
             return jsonify({
                 "success": False,
-                "error": "⚠️ Blocked by Input Filter."
+                "error": "Your message could not be processed."
             }), 403
 
-        # -------------------------
-        # Guardrails
-        # -------------------------
+
+        # ==========================================
+        # GUARDRAILS
+        # ==========================================
 
         safe, reason = check_guardrails(user_message)
 
@@ -58,14 +76,51 @@ def chat():
 
             return jsonify({
                 "success": False,
-                "error": f"⚠️ Blocked by Guardrails ({reason})."
+                "error": "Your message could not be processed."
             }), 403
 
-        # -------------------------
-        # Gemini
-        # -------------------------
 
-        response = generate_response(user_message)
+        # ==========================================
+        # GENERATE AI RESPONSE
+        # ==========================================
+
+        ai_response = generate_response(user_message)
+
+
+        # ==========================================
+        # SAVE CONVERSATION
+        # ==========================================
+
+        try:
+
+            conversation = Conversation(
+                user_id=None,
+                user_message=user_message,
+                ai_response=ai_response,
+                is_saved=False,
+                is_favorite=False
+            )
+
+            db.session.add(conversation)
+            db.session.commit()
+
+            conversation_id = conversation.id
+
+        except Exception as db_error:
+
+            # Do not allow database failure
+            # to destroy the AI response.
+
+            db.session.rollback()
+
+            print("Conversation save error:", db_error)
+
+            conversation_id = None
+
+
+        # ==========================================
+        # LOG REQUEST
+        # ==========================================
 
         log_request(
             client_ip,
@@ -73,14 +128,30 @@ def chat():
             "Allowed"
         )
 
+
+        # ==========================================
+        # RETURN CLEAN AI RESPONSE
+        # ==========================================
+
         return jsonify({
+
             "success": True,
-            "response": response
+
+            "response": ai_response,
+
+            "conversation_id": conversation_id
+
         })
+
 
     except Exception as e:
 
+        print("Chat error:", e)
+
         return jsonify({
+
             "success": False,
-            "error": str(e)
+
+            "error": "Sorry, something went wrong. Please try again."
+
         }), 500

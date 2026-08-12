@@ -36,14 +36,6 @@ class User(db.Model):
         server_default=db.func.now()
     )
 
-    # Relationship with conversations
-    conversations = db.relationship(
-        "Conversation",
-        backref="user",
-        lazy=True,
-        cascade="all, delete-orphan"
-    )
-
     def __repr__(self):
         return f"<User {self.email}>"
 
@@ -62,39 +54,33 @@ class Conversation(db.Model):
         primary_key=True
     )
 
-    # User who owns this conversation
     user_id = db.Column(
         db.Integer,
         db.ForeignKey("public.users.id"),
-        nullable=False
+        nullable=True
     )
 
-    # User's question
     user_message = db.Column(
         db.Text,
         nullable=False
     )
 
-    # AI's response
     ai_response = db.Column(
         db.Text,
         nullable=False
     )
 
-    # When conversation was created
     created_at = db.Column(
         db.DateTime,
         server_default=db.func.now()
     )
 
-    # Saved Chat
     is_saved = db.Column(
         db.Boolean,
         default=False,
         nullable=False
     )
 
-    # Favorite Chat
     is_favorite = db.Column(
         db.Boolean,
         default=False,

@@ -6,11 +6,12 @@ from config import Config
 from database.db import db
 
 # Models
-from database.models import User
+from database.models import User, Conversation
 
 # Routes
 from routes.chat_routes import chat_bp
 from routes.auth_routes import auth_bp
+
 
 app = Flask(__name__)
 
@@ -39,10 +40,6 @@ def home():
 
 
 if __name__ == "__main__":
-
-    print("=" * 60)
-    print("DATABASE URL:", app.config["SQLALCHEMY_DATABASE_URI"])
-    print("=" * 60)
 
     with app.app_context():
         db.create_all()
